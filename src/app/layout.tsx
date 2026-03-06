@@ -38,6 +38,9 @@ export default function RootLayout({
                 <Link href="/gallery" className="nav-link">
                   Gallery
                 </Link>
+                <Link href="/explore" className="nav-link">
+                  Explore
+                </Link>
                 <Link href="/upload" className="nav-link">
                   Upload
                 </Link>
@@ -50,6 +53,22 @@ export default function RootLayout({
         </header>
         {children}
         {/* REPLACE THIS COMMENT */}
+        {/* Footer */}
+        <footer className="border-t bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm mt-auto">
+          <div className="container mx-auto px-4 py-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <Camera className="h-5 w-5 text-blue-600" />
+                <span className="text-sm font-semibold text-slate-900 dark:text-white">
+                  Portfolio Gallery
+                </span>
+              </div>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                &copy; {new Date().getFullYear()} Portfolio Gallery. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </footer>
       </body>
     </html>
   );

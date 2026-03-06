@@ -7,17 +7,23 @@ interface FeatureCardProps {
   iconColor: string;
 }
 
+const iconColorMap: Record<string, string> = {
+  blue: 'icon-blue',
+  green: 'icon-green',
+  purple: 'icon-purple',
+  orange: 'icon-orange',
+  red: 'icon-red',
+};
+
+function getIconColorClass(iconColor: string): string {
+  const match = Object.keys(iconColorMap).find(color => iconColor.includes(color));
+  return match ? iconColorMap[match] : iconColor;
+}
+
 export function FeatureCard({ icon: Icon, title, description, iconColor }: FeatureCardProps) {
   return (
-    <div className="card-feature">
-      <Icon className={`h-12 w-12 mx-auto mb-4 ${
-        iconColor.includes('blue') ? 'icon-blue' :
-        iconColor.includes('green') ? 'icon-green' :
-        iconColor.includes('purple') ? 'icon-purple' :
-        iconColor.includes('orange') ? 'icon-orange' :
-        iconColor.includes('red') ? 'icon-red' :
-        iconColor
-      }`} />
+    <div className="card-feature transition-transform duration-300 hover:scale-105">
+      <Icon className={`h-12 w-12 mx-auto mb-4 ${getIconColorClass(iconColor)}`} />
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <p className="text-slate-600 dark:text-slate-300">
         {description}

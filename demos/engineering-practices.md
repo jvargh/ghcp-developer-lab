@@ -6,13 +6,13 @@ Welcome to the GitHub Copilot engineering practices demo! In this session, we go
 
 By the end of this demo, you will:
 
-- [ ] Understand how Copilot processes requests from input to suggestion
-- [ ] Know how semantic indexing enables meaning-based code search
-- [ ] Master context engineering across Ask, Plan, and Agent modes
-- [ ] Use content exclusions and .copilotignore effectively
-- [ ] Apply advanced prompt engineering techniques (few-shot, chain of thought, RAG, step-back)
-- [ ] Debug and inspect Copilot's decision-making process
-- [ ] Share chat conversations with team members
+- Understand how Copilot processes requests from input to suggestion
+- Know how semantic indexing enables meaning-based code search
+- Master context engineering across Ask, Plan, and Agent modes
+- Use content exclusions and .copilotignore effectively
+- Apply advanced prompt engineering techniques (few-shot, chain of thought, RAG, step-back)
+- Debug and inspect Copilot's decision-making process
+- Share chat conversations with team members
 
 **Estimated Time:** 25-30 minutes
 
@@ -26,19 +26,19 @@ By the end of this demo, you will:
 
 When you trigger Copilot, here's what happens behind the scenes:
 
-1. **Context Assembly** - Copilot looks at open tabs, selected code, and workspace structure
-2. **Secure Transmission** - Request goes through a proxy service
-3. **Pre-Model Checks:**
-   - Toxic/unsafe language filtering
-   - Relevance testing (is it code-related?)
-   - Prompt injection protection
-4. **Model Processing** - LLM generates multiple possible responses, then discards the prompt
-5. **Post-Model Filtering:**
-   - Code quality checks
-   - Security risk scanning
-   - PII detection (emails, IPs)
-   - Optional public code matching
-6. **Delivery** - Suggestions appear in your editor for you to accept/reject
+1.  **Context Assembly** - Copilot looks at open tabs, selected code, and workspace structure
+2.  **Secure Transmission** - Request goes through a proxy service
+3.  **Pre-Model Checks:**
+    - Toxic/unsafe language filtering
+    - Relevance testing (is it code-related?)
+    - Prompt injection protection
+4.  **Model Processing** - LLM generates multiple possible responses, then discards the prompt
+5.  **Post-Model Filtering:**
+    - Code quality checks
+    - Security risk scanning
+    - PII detection (emails, IPs)
+    - Optional public code matching
+6.  **Delivery** - Suggestions appear in your editor for you to accept/reject
 
 **💡 Key Insight:** Multiple safety and quality checks happen automatically before you see any suggestion.
 
@@ -46,8 +46,8 @@ When you trigger Copilot, here's what happens behind the scenes:
 
 **Prompt:**
 
-```markdown
-@workspace Explain the authentication flow in this repository. Walk me through each layer of security checks.
+```
+Explain the authentication flow in this repository. Walk me through each layer of security checks.
 ```
 
 **What to notice:** Copilot assembles context from multiple files before answering.
@@ -60,11 +60,11 @@ When you trigger Copilot, here's what happens behind the scenes:
 
 #### How Semantic Indexing Works
 
-1. **Your Question** → Converted to an **embedding** (mathematical representation of meaning)
-2. **Your Codebase** → Already processed into embeddings (functions, comments, files)
-3. **Vector Similarity Search** → Compares question embedding to code embeddings
-4. **Context Assembly** → Most relevant snippets gathered
-5. **Response Generation** → LLM uses that context to answer
+1.  **Your Question** → Converted to an **embedding** (mathematical representation of meaning)
+2.  **Your Codebase** → Already processed into embeddings (functions, comments, files)
+3.  **Vector Similarity Search** → Compares question embedding to code embeddings
+4.  **Context Assembly** → Most relevant snippets gathered
+5.  **Response Generation** → LLM uses that context to answer
 
 **Example:** Asking about "user authentication" will find code related to "login validation," "access control," or "session management" even without exact keyword matches.
 
@@ -72,14 +72,14 @@ When you trigger Copilot, here's what happens behind the scenes:
 
 **Prompt 1:**
 
-```markdown
-@workspace How is user authentication handled in this repo?
+```
+How is user authentication handled in this repo?
 ```
 
 **Prompt 2 (different wording, same meaning):**
 
-```markdown
-@workspace Where does login validation happen?
+```
+Where does login validation happen?
 ```
 
 **Expected Result:** Both should surface similar authentication-related code, demonstrating semantic understanding.
@@ -112,15 +112,15 @@ When you trigger Copilot, here's what happens behind the scenes:
 
 **Exercise A: Weak Context**
 
-1. Close all tabs except one random file
-2. Type a vague comment: `// add function`
-3. Observe the generic suggestion
+1.  Close all tabs except one random file
+2.  Type a vague comment: `// add function`
+3.  Observe the generic suggestion
 
 **Exercise B: Strong Context**
 
-1. Open `src/app/layout.tsx` and `src/components/ui/layout/Hero.tsx`
-2. Type a specific comment: `// Create a navigation component similar to Hero with logo and menu items`
-3. Observe how Copilot uses patterns from open files
+1.  Open `src/app/layout.tsx` and `src/components/ui/layout/Hero.tsx`
+2.  Type a specific comment: `// Create a navigation component similar to Hero with logo and menu items`
+3.  Observe how Copilot uses patterns from open files
 
 **💡 Pro Tip:** The clearer your code structure and context, the smarter Copilot becomes.
 
@@ -145,9 +145,9 @@ Different Copilot Chat modes pull different context signals. Understanding this 
 
 **Try It:**
 
-```markdown
 Select a complex function in src/lib/photo-helpers.ts, then ask:
 
+```
 /explain this function and suggest one improvement
 ```
 
@@ -164,7 +164,7 @@ Select a complex function in src/lib/photo-helpers.ts, then ask:
 
 **Try It:**
 
-```markdown
+```
 Create a detailed plan to add a "favorites" feature to the photo gallery. Include:
 
 - Data model changes
@@ -189,7 +189,7 @@ Break it into phases with risk assessment for each.
 
 **Try It:**
 
-```markdown
+```
 Add dark mode toggle functionality to the navigation. Update relevant components and ensure consistent theming across the app.
 ```
 
@@ -199,35 +199,39 @@ Add dark mode toggle functionality to the navigation. Update relevant components
 
 ### 🎓 Step 5: Context Engineering Best Practices
 
-#### Practice 1: Leverage Chat History
+#### **Practice 1: Leverage Chat History**
 
 Chat history provides continuity. Build on previous conversations instead of starting fresh each time.
 
 **Try It:**
 
-```markdown
+```
 First prompt:
-@workspace Review the photo upload flow in src/app/upload/page.tsx
+Review the photo upload flow in src/app/upload/page.tsx
 
 Follow-up prompt (in same chat):
 Now suggest error handling improvements based on what we just discussed.
 ```
 
-#### Practice 2: Be Intentional About Scope
+**Outcome:** The follow-up prompt should produce error handling suggestions that are specific to the upload flow discussed in the first prompt, without you needing to re-explain the code. This demonstrates that Copilot retains and builds on prior context within the same chat session, leading to more relevant and focused responses.
 
-**Try It - Repository Scope:**
+#### **Practice 2: Be Intentional About Scope**
 
-```markdown
-@workspace What are the main architectural patterns used in this repository?
+**Try It -** Repository Scope:
+
+```
+What are the main architectural patterns used in this repository?
 ```
 
-**Try It - File Scope:**
+**Try It -** File Scope:
 
-```markdown
+```
 In src/components/gallery/GalleryGrid.tsx, how can we optimize the filtering performance?
 ```
 
-#### Practice 3: Use Custom Instructions
+**Outcome:** The _repository-scoped_ prompt should return a high-level overview of patterns across the entire codebase (e.g., App Router, component-driven architecture, mock data pattern). The _file-scoped_ prompt should return concrete, line-level optimization suggestions specific to `GalleryGrid.tsx`. Comparing the two responses demonstrates how narrowing or broadening scope directly controls the specificity and relevance of Copilot's answers.
+
+#### **Practice 3: Use Custom Instructions**
 
 Custom instructions enforce standards and preferences automatically.
 
@@ -246,19 +250,21 @@ Custom instructions enforce standards and preferences automatically.
 - Include error handling in all async functions
 ```
 
+**Outcome:** After adding custom instructions, any code Copilot generates should automatically follow the specified conventions (e.g., explicit TypeScript types, functional components with hooks, Tailwind CSS patterns, error handling in async functions) without you having to repeat those requirements in every prompt. This demonstrates how custom instructions act as persistent, always-on context that shapes every Copilot response.
+
 ---
 
 ### 🚫 Step 6: Content Exclusions with .copilotignore
 
-**Why this matters:** Context engineering isn't just about _adding_ context—it's also about intentionally _removing_ sensitive, irrelevant, or noisy content.
+**Why this matters:** Context engineering isn't just about _adding_ context, it's also about intentionally _removing_ sensitive, irrelevant, or noisy content.
 
 #### What Gets Excluded
 
 When you exclude content:
 
-1. Code completions won't work in those files
-2. Excluded files won't influence suggestions in other files
-3. They won't inform Copilot Chat responses
+1.  Code completions won't work in those files
+2.  Excluded files won't influence suggestions in other files
+3.  They won't inform Copilot Chat responses
 
 #### Try It: Create a .copilotignore File
 
@@ -266,7 +272,7 @@ When you exclude content:
 
 **Prompt:**
 
-```markdown
+```
 Create a .copilotignore file that excludes:
 
 - node_modules
@@ -277,19 +283,40 @@ Create a .copilotignore file that excludes:
 
 **Step 2: Save the file to your workspace root**
 
-**Step 3: Validate it works**
+**Step 3: Understand what .copilotignore does (and doesn't do)**
 
-**Test Prompts (should return appropriate boundaries):**
+`.copilotignore` controls **context inclusion**, not file access. It prevents excluded files from being used as background context for completions and chat, but it does **not** block direct file reads or terminal commands.
 
-```markdown
-Are there any files in node_modules?
-→ Expected: Copilot should indicate content exclusion
+| What it does                                               | What it does NOT do                                     |
+| ---------------------------------------------------------- | ------------------------------------------------------- |
+| Excludes files from code completion context                | Block terminal commands (`ls`, `cat`, etc.)             |
+| Prevents files from influencing suggestions in other files | Prevent Copilot from reading a file if explicitly asked |
+| Removes files from semantic index used by Chat             | Act as a security boundary or access control            |
 
-What's in my .env.local file?
-→ Expected: Copilot should not access it
-```
+**Step 4: Validate context exclusion**
 
-**💡 Pro Tip:** Use exclusions for security, compliance, and focus—not just privacy.
+**Validation 1: Code completions are suppressed**
+
+1.  Open a file matched by `.copilotignore` (e.g., a file inside `node_modules/`)
+2.  Start typing code in that file
+3.  **Expected:** Copilot does not offer inline completions
+
+**Validation 2: Excluded files don't appear as automatic context**
+
+1.  Open the Copilot Chat Debug view (`Ctrl+Shift+P` → "Copilot Chat Debug")
+2.  Ask a general question:
+3.  Inspect the debug panel's context section
+4.  **Expected:** No `node_modules/` files appear in the gathered context — Copilot answers from `package.json` instead
+
+**Validation 3: Excluded files don't influence suggestions in other files**
+
+1.  Open `src/app/page.tsx`
+2.  Start writing a new import statement
+3.  **Expected:** Copilot suggests imports from `src/` files, not from paths inside excluded directories
+
+**⚠️ Important Clarification:** If you directly ask Copilot to read an excluded file (e.g., "list files in node_modules"), it can still do so via tool calls. `.copilotignore` is a **context filter**, not a security boundary. For true access control, use repository permissions and environment-level secrets management.
+
+**💡 Pro Tip:** Use exclusions for focus and noise reduction. For security-sensitive files like `.env.local`, rely on `.gitignore` to keep them out of version control, and secrets management tools for production credentials.
 
 ---
 
@@ -303,35 +330,49 @@ LLM Input = User Prompt + System Prompt + Context Gathered - Content Exclusions
 
 Let's break it down:
 
-1. **User Prompt** - What you type (be clear and specific)
-2. **System Prompt** - Built-in behavior + custom instructions (`.copilot-instructions.md` in repo root)
-3. **Context Gathered** - Selected code, open tabs, repo index, chat history, patterns
-4. **Content Exclusions** - `.copilotignore`, settings, exclusion policies
+1.  **User Prompt** - What you type (be clear and specific)
+2.  **System Prompt** - Built-in behavior + custom instructions (`.copilot-instructions.md` in repo root)
+3.  **Context Gathered** - Selected code, open tabs, repo index, chat history, patterns
+4.  **Content Exclusions** - `.copilotignore`, settings, exclusion policies
 
 **Try It: See the Formula in Action**
 
-**Step 1: Create a .copilot-instructions.md file (if not exists)**
+This repo already has a `.github/copilot-instructions.md` file with project conventions. In this exercise you will create a second, separate instructions file to observe how it changes Copilot's output.
 
-**Prompt:**
+**Step 1: Create a custom instructions file**
 
-```markdown
-Create a .copilot-instructions.md file for this repository that enforces:
+Run the following prompt
 
-- Use Next.js 15 App Router patterns
-- All components must have TypeScript interfaces
-- Follow the existing dark mode patterns
-- Include JSDoc comments for complex functions
+```
+Create a new file at .github/instructions/photo-components.instructions.md with the following content:
+
+---
+applyTo: "src/components/**"
+---
+- All photo-related components must accept an `alt` prop for accessibility
+- Use CSS Grid (not Flexbox) for any multi-item layout
+- Wrap interactive elements in `<button>` not `<div onClick>`
+- Include a loading skeleton state for any component that displays images
 ```
 
-**Step 2: Save to workspace root**
+**Step 2: Test with a prompt**
 
-**Step 3: Test it**
-
-```markdown
+```
 Create a new PhotoCard component for displaying individual photos in the gallery.
 ```
 
-**Expected Result:** Copilot should follow the patterns defined in your instructions.
+**Step 3: Verify each part of the formula**
+
+Open the Copilot Chat Debug view (`Ctrl+Shift+P` → "Copilot Chat Debug") and confirm:
+
+| Formula Term           | What to Look For                                                                                     |
+| ---------------------- | ---------------------------------------------------------------------------------------------------- |
+| **User Prompt**        | Your "Create a new PhotoCard..." text                                                                |
+| **System Prompt**      | Both `.github/copilot-instructions.md` and your new `photo-components.instructions.md` should appear |
+| **Context Gathered**   | Existing components like `FeatureCard.tsx`, `GalleryGrid.tsx` pulled in via semantic index           |
+| **Content Exclusions** | Any `.copilotignore` rules filtering out `node_modules`, `.next`, etc.                               |
+
+**Outcome:** The generated PhotoCard should include an `alt` prop, use CSS Grid, use `<button>` for interactions, and include a loading skeleton, proving that the custom instructions file fed into the **System Prompt** term of the formula. If you remove the instructions file and re-run the same prompt, the output will differ, showing the formula in action.
 
 ---
 
@@ -343,15 +384,15 @@ Create a new PhotoCard component for displaying individual photos in the gallery
 
 #### Method 1: Using Keyboard Shortcut
 
-1. Press `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (Mac)
-2. Type "Copilot Chat Debug"
-3. Select **"Copilot Chat Debug: Focus on Copilot Chat Debug View"**
+1.  Press `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (Mac)
+2.  Type "Copilot Chat Debug"
+3.  Select **"Copilot Chat Debug: Focus on Copilot Chat Debug View"**
 
 #### Method 2: Using the Menu
 
-1. Go to **View** → **Command Palette**
-2. Type "Copilot Chat Debug"
-3. Select **"Copilot Chat Debug: Focus on Copilot Chat Debug View"**
+1.  Go to **View** → **Command Palette**
+2.  Type "Copilot Chat Debug"
+3.  Select **"Copilot Chat Debug: Focus on Copilot Chat Debug View"**
 
 #### What You'll See in the Debug Panel
 
@@ -363,15 +404,12 @@ Create a new PhotoCard component for displaying individual photos in the gallery
 
 **Try It: Trace a Request**
 
-1. Open the Debug view
-2. Ask Copilot:
-   ```markdown
-   @workspace How does pagination work in this repository?
-   ```
-3. In the debug panel, expand the request details
-4. Observe what context was gathered and sent to the model
+1.  Open the Debug view
+2.  Ask Copilot: `What components are used on the homepage in src/app/page.tsx?`
+3.  In the debug panel, expand the request details
+4.  Observe what context was gathered and sent to the model
 
-**💡 Pro Tip:** Use the debug view when suggestions seem off—you can see exactly what context was used and adjust your approach.
+**💡 Pro Tip:** Use the debug view when suggestions seem off. You can see exactly what context was used and adjust your approach.
 
 ---
 
@@ -383,15 +421,15 @@ Create a new PhotoCard component for displaying individual photos in the gallery
 
 **Method 1: Keyboard Shortcut**
 
-1. Press `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (Mac)
-2. Type "Chat: Export"
-3. Select **"Chat: Export Chat..."**
+1.  Press `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (Mac)
+2.  Type "Chat: Export"
+3.  Select **"Chat: Export Chat..."**
 
 **Method 2: Menu Navigation**
 
-1. Go to **View** → **Command Palette**
-2. Type "Chat: Export"
-3. Select **"Chat: Export Chat..."**
+1.  Go to **View** → **Command Palette**
+2.  Type "Chat: Export"
+3.  Select **"Chat: Export Chat..."**
 
 **What happens:** Creates a file containing your entire chat history that you can share with teammates.
 
@@ -399,15 +437,15 @@ Create a new PhotoCard component for displaying individual photos in the gallery
 
 **Method 1: Keyboard Shortcut**
 
-1. Press `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (Mac)
-2. Type "Chat: Import"
-3. Select **"Chat: Import Chat..."**
+1.  Press `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (Mac)
+2.  Type "Chat: Import"
+3.  Select **"Chat: Import Chat..."**
 
 **Method 2: Menu Navigation**
 
-1. Go to **View** → **Command Palette**
-2. Type "Chat: Import"
-3. Select **"Chat: Import Chat..."**
+1.  Go to **View** → **Command Palette**
+2.  Type "Chat: Import"
+3.  Select **"Chat: Import Chat..."**
 
 **Use Case:** Import conversations shared by teammates to see their successful prompting strategies.
 
@@ -428,10 +466,10 @@ Now that you understand context engineering, let's level up with advanced prompt
 
 There are four core techniques that will transform how you interact with Copilot:
 
-1. **Few-Shot Prompting** - Show examples of what you want
-2. **Chain of Thought** - Ask for step-by-step reasoning
-3. **Retrieval Augmented Generation (RAG)** - Ground responses in specific sources
-4. **Step-Back Prompting** - Zoom out before diving in
+1.  **Few-Shot Prompting** - Show examples of what you want
+2.  **Chain of Thought** - Ask for step-by-step reasoning
+3.  **Retrieval Augmented Generation (RAG)** - Ground responses in specific sources
+4.  **Step-Back Prompting** - Zoom out before diving in
 
 Let's practice each one.
 
@@ -447,7 +485,7 @@ Let's practice each one.
 
 **Prompt:**
 
-```markdown
+```
 Create a function to format photo metadata for display. Follow these examples:
 
 Example 1:
@@ -481,7 +519,7 @@ Now create the formatPhotoMetadata() function that follows this pattern.
 
 **Prompt:**
 
-```markdown
+```
 In src/components/gallery/GalleryGrid.tsx, the filtering feels slow when there are many photos.
 
 Walk me through step by step:
@@ -500,7 +538,7 @@ Show your reasoning at each step.
 
 **Prompt:**
 
-```markdown
+```
 We need to add a "favorites" feature. Walk me through step by step:
 
 1. Compare these approaches:
@@ -533,16 +571,15 @@ We need to add a "favorites" feature. Walk me through step by step:
 
 RAG happens automatically when you:
 
-- Use `@workspace` to reference the indexed repository
+- Copilot automatically includes workspace context from the indexed repository
 - Reference specific files or code snippets
-- Connect to MCP servers for external data sources
 
 #### Try It: Reference-Grounded Code Generation
 
 **Prompt:**
 
-```markdown
-@workspace Based on the patterns used in src/components/ui/cards/FeatureCard.tsx and src/components/gallery/GalleryGrid.tsx, create a new PhotoCard component that:
+```
+Based on the patterns used in src/components/ui/cards/FeatureCard.tsx and src/components/gallery/GalleryGrid.tsx, create a new PhotoCarousel component that:
 
 - Uses the same Tailwind styling patterns
 - Follows the dark mode implementation approach
@@ -554,15 +591,7 @@ Pull implementation details directly from those files.
 
 **Expected Result:** Code that closely matches your existing patterns because it retrieved and used them as reference.
 
-#### Try It: MCP-Style RAG Prompt (Conceptual)
-
-**Prompt:**
-
-```markdown
-Using the component patterns documented in COMPONENT_USAGE_GUIDE.md and the mock data structure in src/lib/mock-photo-data.ts, create a photo carousel component that matches our established conventions.
-```
-
-**💡 Key Benefit:** Responses grounded in real information from your codebase or connected knowledge sources.
+**💡 Key Benefit:** Responses grounded in real information from your codebase rather than generic patterns.
 
 ---
 
@@ -578,7 +607,7 @@ Using the component patterns documented in COMPONENT_USAGE_GUIDE.md and the mock
 
 **Prompt:**
 
-```markdown
+```
 Before we refactor the file upload logic, explain the key principles we should follow for:
 
 - Secure file uploads in a Next.js application
@@ -593,38 +622,24 @@ Focus on best practices and security considerations.
 
 **Prompt:**
 
-```markdown
+```
 Now, using those principles, review src/components/upload/UploadZone.tsx and suggest specific improvements. Prioritize security and user experience.
 ```
 
 **Expected Result:** More thoughtful refactoring because the model reasoned about principles first.
 
-#### Try It: Architecture Decision
-
-**Step 1: Establish Context**
-
-**Prompt:**
-
-```markdown
-What are the trade-offs between client-side state management approaches for a photo gallery with filtering, pagination, and search? Consider:
-
-- React Context
-- Zustand
-- Local component state with URL params
-- Server state libraries (TanStack Query)
-
-Explain the architectural implications of each.
-```
-
-**Step 2: Make Specific Recommendation**
-
-**Prompt:**
-
-```markdown
-Given our current Next.js 15 App Router setup and the need to add favorites + collections features, which approach should we use? Provide implementation guidance.
-```
-
 **💡 Key Benefit:** Better decisions because you engaged the model's understanding of broader concepts before specific implementation.
+
+---
+
+### Prompt Engineering Techniques Summary
+
+| Technique                     | When to Use                                           | How It Works                                                   | Key Difference                                                |
+| ----------------------------- | ----------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------- |
+| **Few-Shot Prompting**        | You need consistent formatting or a specific pattern  | Provide 2-3 input/output examples so Copilot infers the rule   | You _show_ what you want instead of describing it             |
+| **Chain of Thought**          | Debugging, trade-off analysis, multi-step logic       | Ask Copilot to reason step by step and show its work           | Forces structured reasoning you can verify at each stage      |
+| **RAG (Retrieval Augmented)** | Accuracy matters and existing code should be followed | Point Copilot at specific files so it retrieves real patterns  | Grounds output in your actual codebase, not generic knowledge |
+| **Step-Back Prompting**       | Complex refactors or architectural decisions          | Ask about principles first, then apply to the specific problem | Separates "what should we do" from "how do we do it"          |
 
 ---
 
@@ -634,43 +649,43 @@ Mark off each item as you complete it:
 
 ### Understanding Copilot Internals
 
-- [ ] Understand the request flow from input to suggestion
-- [ ] Know how semantic indexing works with embeddings
-- [ ] Can explain the context gathering formula
+- Understand the request flow from input to suggestion
+- Know how semantic indexing works with embeddings
+- Can explain the context gathering formula
 
 ### Context Engineering
 
-- [ ] Practiced context engineering basics (strong vs. weak context)
-- [ ] Used Ask, Plan, and Agent modes with appropriate context
-- [ ] Applied context engineering best practices (chat history, scope, custom instructions)
-- [ ] Created and tested a .copilotignore file
-- [ ] Created a .copilot-instructions.md file for repo-level guidance
+- Practiced context engineering basics (strong vs. weak context)
+- Used Ask, Plan, and Agent modes with appropriate context
+- Applied context engineering best practices (chat history, scope, custom instructions)
+- Created and tested a .copilotignore file
+- Created a .copilot-instructions.md file for repo-level guidance
 
 ### Debugging & Collaboration
 
-- [ ] Used the Copilot Chat Debug view to inspect requests
-- [ ] Exported a chat conversation
-- [ ] Imported a chat conversation
+- Used the Copilot Chat Debug view to inspect requests
+- Exported a chat conversation
+- Imported a chat conversation
 
 ### Prompt Engineering Techniques
 
-- [ ] Applied few-shot prompting with examples
-- [ ] Used chain of thought for step-by-step reasoning
-- [ ] Practiced RAG by referencing specific files
-- [ ] Applied step-back prompting for architectural decisions
+- Applied few-shot prompting with examples
+- Used chain of thought for step-by-step reasoning
+- Practiced RAG by referencing specific files
+- Applied step-back prompting for architectural decisions
 
 ## 🎓 Key Takeaways
 
-1. **Data Flow Awareness** - Multiple safety checks happen before suggestions reach you
-2. **Semantic Understanding** - Copilot searches by meaning, not just keywords
-3. **Context is King** - The quality of context directly impacts the quality of responses
-4. **Mode Selection Matters** - Use Ask for quick help, Plan for strategy, Agent for execution
-5. **Engineering Context** - You're not just writing prompts, you're architecting context
-6. **Debug When Needed** - Use the debug view to understand unexpected results
-7. **Prompt Strategically** - Combine few-shot, chain of thought, RAG, and step-back for powerful results
+1.  **Data Flow Awareness** - Multiple safety checks happen before suggestions reach you
+2.  **Semantic Understanding** - Copilot searches by meaning, not just keywords
+3.  **Context is King** - The quality of context directly impacts the quality of responses
+4.  **Mode Selection Matters** - Use Ask for quick help, Plan for strategy, Agent for execution
+5.  **Engineering Context** - You're not just writing prompts, you're architecting context
+6.  **Debug When Needed** - Use the debug view to understand unexpected results
+7.  **Prompt Strategically** - Combine few-shot, chain of thought, RAG, and step-back for powerful results
 
 ## 🚀 What's Next?
 
 Congratulations! You've mastered the engineering foundations of GitHub Copilot. You now understand how to deliberately shape context and craft strategic prompts.
 
-👉 **[Start Customize Copilot Demo](./customize-copilot.md)**
+👉 [**Start Customize Copilot Demo**](./customize-copilot.md)
