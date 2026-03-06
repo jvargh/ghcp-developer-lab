@@ -62,8 +62,7 @@ Run the same prompt with 2-3 models and compare output quality, speed, and depth
 **Prompt:**
 
 ```
-Refactor this selected function for better performance and readability, and improve the TypeScript types.
-Keep behavior unchanged.
+Refactor this selected function for better performance and readability, and improve the TypeScript types. Keep behavior unchanged.
 ```
 
 **Discussion:**
@@ -78,33 +77,55 @@ Keep behavior unchanged.
 
 Copilot can adapt to your team workflow without repeating context every time.
 
-### 2.1 Custom instructions (`.copilot-instructions.md`)
+### 2.1 Scoped instructions files (`.instructions.md`)
 
-Custom instructions are always-on repo guidance that shape all chat responses.
+In the Engineering Practices demo you created a component-scoped instructions file. Here you will create a second one scoped to mock data files, showing that multiple instructions files can coexist and target different parts of the codebase.
 
 **Technique guidelines:**
 
+- Use YAML front matter with `applyTo` to scope rules to specific paths.
 - Keep rules short and clear.
-- Focus on repo-specific standards.
-- Include architecture, libraries, testing, and security expectations.
-
-**Seed instruction block (use in this repo):**
-
-```
-Modify UI
-
-- Use Next.js App Router pages under app.
-- TypeScript only; no any without a comment explaining why.
-- Use Tailwind utilities; avoid custom CSS unless the class is reused 3+ times.
-- Prefer src/components/ui/layout/\* and SectionContainer + SectionTitle for page structure.
-- Mock data lives in src/lib/mock-\*.ts.
-```
+- Focus on conventions that differ from the repo-wide defaults.
 
 **Exercise:**
 
-1.  Create/update `.copilot-instructions.md` with the block above.
-2.  Ask Copilot to generate a small UI component.
-3.  Verify that responses follow these rules automatically.
+- Create `.github/instructions/mock-data.instructions.md` with the following content:
+
+```
+---
+applyTo: "src/lib/mock-*.ts"
+---
+- Every mock data array must export a TypeScript type or interface for its items
+- Use realistic placeholder values (not "test1", "foo", "Lorem ipsum")
+- Include at least one optional field in each interface
+- Sort arrays by a date field in descending order (newest first)
+- Add a JSDoc comment above each exported array explaining its purpose
+```
+
+- Ask Copilot to generate new mock data using below prompt. Validate that it read the `mock-data.instructions.md` during the run.
+
+```
+Create a mock-collection-data.ts file in src/lib/ with sample photo collections data.
+```
+
+**Output:**
+
+- Verify the output includes an exported interface, realistic values, an optional field, descending date sort, and a JSDoc comment above the array.
+
+```
+compare src/lib/mock-*.ts and ensure it follows instructions in mock-data.instructions.md
+```
+
+- Open `src/lib/mock-photo-data.ts` and compare it side by side with your new file. The existing file was written without these instructions, so you should see these differences:
+
+| Rule from instructions             | `mock-photo-data.ts` (existing)         | Your new file (expected)                           |
+| ---------------------------------- | --------------------------------------- | -------------------------------------------------- |
+| JSDoc comment above exported array | No JSDoc comment                        | Has a `/** ... */` comment above the array         |
+| Descending date sort               | Not sorted by date                      | Items ordered newest-to-oldest                     |
+| Optional field with `?`            | Has optional fields, but by coincidence | Intentionally includes at least one `?` field      |
+| Realistic placeholder values       | Uses generic names like "John Doe"      | Uses more varied, realistic names and descriptions |
+
+If your new file matches the right column, the scoped instructions worked. If it looks like the left column, check that the `applyTo` glob matches `src/lib/mock-*.ts` and regenerate.
 
 ### 2.2 Prompt files (`.prompt.md`)
 
@@ -152,7 +173,7 @@ This repo includes a ready-made prompt file for unit test generation at `.github
 
 Custom agents define a purpose-driven role in your repo so your team does not repeat instructions each time.
 
-Create agent definitions under `.github/agents/` with purpose, behavior, allowed tools, and output style.
+Create agent definitions under `.github/agents/` with purpose, behavior, allowed tools, and output style. This is done using the Gear icon in Copilot Chat.
 
 **Status in this repo:**
 
@@ -181,7 +202,7 @@ The following local custom agents are now available:
 
 **Quick exercise (local):**
 
-1.  Open Copilot Chat and switch to Agent mode.
+1.  Open Copilot Chat and pick the respective agent mode i.e. `security-review` or `frontend-standards`.
 2.  Open a target file (for example `src/components/gallery/GalleryGrid.tsx`).
 3.  Run one of the following prompts:
 
@@ -199,18 +220,28 @@ Use @frontend-standards to review this component against project conventions and
 
 ## 🧭 Step 3: Use Chat Modes Intentionally
 
-1.  Review `.github/chatmodes/Plan.chatmode.md`.
-2.  In Copilot Chat, switch to **Plan** mode.
-3.  Run:
+Copilot Chat has three built-in modes. Each one changes what Copilot can do and how it reasons. Use the mode picker at the top of the Chat panel to switch between them.
+
+| Mode      | What it does                                                   | Can edit files? |
+| --------- | -------------------------------------------------------------- | --------------- |
+| **Ask**   | Answers questions using workspace context. Read-only.          | No              |
+| **Edit**  | Makes targeted edits to files you specify.                     | Yes (scoped)    |
+| **Agent** | Autonomously plans and executes multi-step tasks across files. | Yes (broad)     |
+
+**Exercise: Same prompt, different modes**
+
+Use the following prompt in each mode and compare the results:
 
 ```
 Help me plan a new page for creating galleries.
 Include component structure, data flow, validations, and testing plan.
 ```
 
-1.  Compare with Ask/Agent mode for the same task.
+1.  Switch to **Ask** mode and run the prompt. Copilot should return a written plan but make no file changes.
+2.  Switch to **Agent** mode and run the same prompt. Copilot should propose an implementation plan and start creating or editing files.
+3.  Compare: Ask gives you a document to review. Agent gives you working code to accept or reject.
 
-**Key idea:** mode selection changes how Copilot reasons and executes.
+**Key idea:** Choose Ask when you want to think before acting. Choose Agent when you want Copilot to act. Choose Edit when you want precise, scoped changes to specific files.
 
 ---
 
@@ -245,13 +276,13 @@ A skill is a folder containing `SKILL.md` plus optional scripts/templates/resour
 
 ### How skills differ from prompts and agents
 
-Unlike prompt files (manually invoked) and custom agents (explicitly selected), Agent Skills are **relevance-triggered** — Copilot applies the workflow automatically when your intent matches the skill description. No `/slash` command or `@agent` prefix needed.
+Unlike prompt files (manually invoked) and custom agents (explicitly selected), Agent Skills are **relevance-triggered.** Copilot applies the workflow automatically when your intent matches the skill description. No `/slash` command or `@agent` prefix needed.
 
 ### Exercise: Use the existing skill
 
 1.  Open `.github/skills/ui-test-generation/SKILL.md` and skim the workflow.
 2.  Open a target component, for example `src/components/ui/cards/FeatureCard.tsx`.
-3.  In Copilot Chat (Agent or Ask mode), run a prompt that triggers the skill:
+3.  In Copilot Chat (Agent or Ask mode), run a prompt that triggers the skill. Ensure the run reads the ui-test-generation skill.
 
 ```
 Add UI tests for FeatureCard and include a validation checklist.
