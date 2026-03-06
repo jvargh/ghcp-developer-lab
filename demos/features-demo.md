@@ -445,7 +445,7 @@ Generate a comprehensive unit test file for src/components/gallery/GalleryGrid.t
 Add edge case tests for missing props and very long text content
 ```
 
-**💡 Pro Tip:** Start with `/tests` for quick generation, then use inline chat to refine and add edge cases incrementally.
+#### **💡 Pro Tip:** Start with `/tests` for quick generation, then use inline chat to refine and add edge cases incrementally.
 
 ### 4.3 Debug a Local Issue
 
