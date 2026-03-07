@@ -14,7 +14,48 @@ By the end of this demo, you will:
 
 **Estimated Time:** 20-25 minutes
 
-## 🎯 Step 1: Create Your First Copilot Space
+## 🚀 Step 1: Commit and Push Your Code to GitHub
+
+Before using Copilot Spaces with your repository, your latest local changes need to be available on GitHub.
+
+**Exercise:**
+
+1.  Open the **Source Control** panel in VS Code (`Ctrl+Shift+G`).
+2.  Review the list of changed files. Stage all changes by clicking the **+** icon next to **Changes**, or run:
+
+```
+git add .
+```
+
+1.  Enter a commit message (e.g., `Initial setup for Copilot Spaces lab`) and commit:
+
+```
+git commit -m "Initial setup for Copilot Spaces lab"
+```
+
+1.  Push your branch to GitHub:
+
+```
+git push origin HEAD
+```
+
+1.  Verify the push by opening your repository on GitHub and confirming your latest commit appears.
+
+**💡 Pro Tip:** If you haven't set the upstream branch yet, use `git push -u origin <branch-name>` on the first push.
+
+**Alternative: Use Agent Mode with GitHub MCP**
+
+Instead of running manual git commands, you can ask Copilot in **Agent** mode to handle the commit and push for you. Make sure the GitHub MCP server is configured in `.vscode/mcp.json`, then run:
+
+```
+Commit all current changes with the message "Initial setup for Copilot Spaces lab" and push to the remote repository.
+```
+
+Copilot will stage, commit, and push your changes using the available terminal and MCP tools.
+
+---
+
+## 🎯 Step 2: Create Your First Copilot Space
 
 **Goal:** Set up a dedicated Copilot Space for working on gallery features.
 
@@ -94,7 +135,7 @@ next.config.ts
 - Image processing vulnerabilities
 ```
 
-**Outcome:** You now have a fully configured Copilot Space with security-focused instructions, relevant project source files, and OWASP reference material loaded as context. This Space is ready to use in Step 2, where you'll ask it to perform a security analysis of the photo gallery application.
+**Outcome:** You now have a fully configured Copilot Space with security-focused instructions, relevant project source files, and OWASP reference material loaded as context. This Space is ready to use in Step 3, where you'll ask it to perform a security analysis of the photo gallery application.
 
 ### Group B Option: Documentation Generation & API Design
 
@@ -170,7 +211,7 @@ package.json
 - **Static Sites**: Docusaurus, GitBook, MkDocs
 ```
 
-**Outcome:** You now have a fully configured Copilot Space with documentation-focused instructions, relevant project source files, and documentation standards loaded as context. This Space is ready to use in Step 2, where you'll ask it to generate API specs, component docs, and architecture decision records for the photo gallery application.
+**Outcome:** You now have a fully configured Copilot Space with documentation-focused instructions, relevant project source files, and documentation standards loaded as context. This Space is ready to use in Step 3, where you'll ask it to generate API specs, component docs, and architecture decision records for the photo gallery application.
 
 ### Share your Space \[OPTIONAL\]
 
@@ -182,11 +223,11 @@ package.json
 
 **Expected Result:** A new Copilot Space will be created and opened, providing you with a dedicated environment for this development session.
 
-## 🤝 Step 2: Collaborate and Share
+## 🤝 Step 3: Collaborate and Share
 
-**Goal:** Use the Copilot Space you created in Step 1 to complete the task listed below.
+**Goal:** Use the Copilot Space you created in Step 2 to complete the task listed below.
 
-**Challenge:** If your group created the Space in an organization, switch Copilot Spaces to try out the other group's Space! I.e, if you chose **Group B** in Step 1, try the **Group A** Space this time and vice versa.
+**Challenge:** If your group created the Space in an organization, switch Copilot Spaces to try out the other group's Space! I.e, if you chose **Group B** in Step 2, try the **Group A** Space this time and vice versa.
 
 ### Group A Option
 
@@ -254,6 +295,7 @@ Share your thoughts and any tips you discovered for making the most of Copilot S
 
 Mark off each item as you complete it:
 
+- Committed and pushed local changes to GitHub
 - Created a new GitHub Copilot Space with a clear security or documentation focus
 - Set detailed instructions incorporating industry standards
 - Added relevant project files to the Space context
