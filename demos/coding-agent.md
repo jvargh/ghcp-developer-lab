@@ -135,10 +135,11 @@ Mission Control is the centralized interface for managing and monitoring Copilot
 
 1.  Open an existing agent session from the Agents tab (or wait until you create one in Step 6).
 2.  Explore the Mission Control layout:
-    - **Right panel:** Session details and summaries
-    - **Main panel:** Steps the agent is taking (reading files, running commands, updating code)
+    - **Left sidebar:** List of agent sessions with status indicators
+    - **Main panel:** Session details including the task description, environment setup steps, and the agent's actions (viewing repository, reading files, running commands, updating code)
+    - **Bottom input:** "What would you like to change?" field for adding instructions while the session is running
 3.  Open and review **file diffs** directly from the session to see exactly what the agent changed.
-4.  Note the option to **add instructions while the session is running** - Copilot adjusts its plan after the current step finishes.
+4.  Try adding an instruction using the bottom input field - Copilot adjusts its plan after the current step finishes.
 
 **Key idea:** Mission Control gives you visibility and control over what the coding agent is doing while it works - everything in one place instead of jumping between multiple pages.
 
@@ -148,25 +149,47 @@ Mission Control is the centralized interface for managing and monitoring Copilot
 
 ### 4.1 Custom Agents for Issues
 
-When you assign an issue to Copilot, you can also **select or create a custom agent** - tailoring how Copilot approaches that task instead of relying on default behavior.
+When you assign an issue to Copilot, you have the option to use the default **Copilot** agent or create a **custom agent** for specialized tasks. The assignment dialog shows an **Agents** dropdown where you can select Copilot or click **\+ Create a custom agent**.
 
-A custom agent is essentially a **role with defined instructions and tools**. For example, you might create an agent focused on UI work, debugging, testing, or Kubernetes configuration.
+A custom agent is a role with defined instructions. For example, you might create an agent focused on security review, UI work, debugging, or testing. You can also provide an **optional prompt** to give Copilot additional instructions beyond the issue description.
 
-**Exercise: Review existing custom agents**
+**Exercise: Assign an issue with additional instructions**
 
-This repository already has custom agents defined. Review them to understand the pattern:
+1.  Go to your repository on GitHub and click **New issue**.
+2.  Enter the following title and description:
 
-1.  Open `.github/agents/security-review.agent.md` and `.github/agents/frontend-standards.agent.md`.
-2.  Note the structure: **role**, **scope**, **tool access**, **required checks**, and **output format**.
+**Title:** `Review the upload component for security vulnerabilities`
+
+**Description (copy and paste into the issue body):**
+
+> Perform a security review of the file upload component.
+>
+> Acceptance criteria:
+>
+> - Check for file type validation vulnerabilities
+> - Identify any XSS risks in user input handling
+> - Review for missing input sanitization
+> - Provide a summary of findings with severity levels
+>
+> Relevant files: src/components/upload/UploadZone.tsx
+
+1.  Click **Submit new issue**.
+2.  Click **Assign Copilot to issue**. In the assignment dialog:
+    - Click the **Agents** dropdown (shows **Copilot** by default)
+    - Under **Custom agents**, select **security-review**
+    - Optionally add instructions in the **Optional prompt** field
+    - Confirm the correct repository is selected
+    - Click the submit button to assign
+3.  Track the session in the **Agents** tab and observe how the custom agent's security-focused instructions shape Copilot's approach.
 
 **Discussion:**
 
-- What other custom agents would be useful for your team's workflow?
-- How would a custom agent for "database migrations" or "API endpoint development" differ from the existing ones?
+- How did using the **security-review** custom agent affect Copilot's output compared to the default Copilot agent?
+- What other custom agents would be useful for your team's recurring tasks?
 
 ### 4.2 Agent Skills
 
-Agent Skills teach Copilot a **repeatable workflow** it can reuse whenever a task matches the skill description.
+Agent Skills teach Copilot a **repeatable workflow** it can reuse whenever a task matches the skill description. Unlike custom agents (which you explicitly select), skills are **relevance-triggered** - Copilot automatically picks them up when your request matches the skill's description.
 
 A skill is a folder containing a `SKILL.md` file along with any examples, scripts, or resources Copilot needs to follow that workflow.
 
@@ -176,13 +199,36 @@ A skill is a folder containing a `SKILL.md` file along with any examples, script
 - Skills can be **packaged and shared** - teams reuse the same workflows across repositories and environments
 - Useful for common processes like **testing, debugging, or deployments** where you want consistent steps every time
 
-**Exercise: Explore the existing skill**
+**Exercise: Test if a skill gets picked up by relevance**
 
-1.  Open `.github/skills/ui-test-generation/SKILL.md` and skim the workflow it defines.
-2.  Note the structure: description, trigger conditions, workflow steps, and resources.
-3.  Compare it to a prompt file (`.github/prompts/`) - skills are **relevance-triggered** (automatic) while prompt files are **manually invoked** (`/slash` command).
+1.  Open your repository on GitHub and browse to `.github/skills/ui-test-generation/SKILL.md` to review the workflow it defines. Note the skill's description and trigger conditions.
+2.  Go to **Issues** and click **New issue**.
+3.  Enter the following title and description:
 
-**How skills differ from other customizations:**
+**Title:** `Add UI tests for the PhotoCard component`
+
+**Description (copy and paste into the issue body):**
+
+> Generate unit tests for the PhotoCard component with a validation checklist.
+>
+> Acceptance criteria:
+>
+> - Tests cover rendering, props, and edge cases
+> - Tests follow the project's testing conventions
+> - A validation checklist is included
+>
+> Relevant files: src/components/gallery/PhotoCard.tsx
+
+1.  Click **Submit new issue**.
+2.  Assign **GitHub Copilot** to the issue (use the default **Copilot** agent - do not select a custom agent).
+3.  Open the session in the **Agents** tab and watch the timeline. Look for signs that the agent picked up the `ui-test-generation` skill:
+    - Does it reference or read the `SKILL.md` file?
+    - Does it follow the skill's defined workflow steps?
+    - Does the output include a validation checklist (as the skill defines)?
+
+**Expected Result:** If the skill is picked up by relevance, the agent follows the skill's workflow rather than using a generic approach. If it doesn't get triggered, compare the output to what the skill defines and discuss why it may not have matched.
+
+**How skills differ from custom agents:**
 
 | Customization       | Invocation          | Best For                      |
 | ------------------- | ------------------- | ----------------------------- |
@@ -193,7 +239,7 @@ A skill is a folder containing a `SKILL.md` file along with any examples, script
 
 ---
 
-## 🏗️ Step 5: Agent Architecture - Behind the Scenes
+## 🏗️ Step 5: Agent Architecture - Observe the Plan-Act-Observe Loop
 
 ### How the Plan-Act-Observe Loop Works
 
@@ -201,116 +247,95 @@ Understanding the architecture helps you write better issues and prompts for the
 
 **The loop:**
 
-1.  **User input** - You enter a prompt or assign an issue.
-2.  **Context gathering** - Copilot gathers additional context from the workspace, machine environment, and available tools.
-3.  **Planning** - The LLM plans what actions are needed.
-4.  **Action** - Copilot calls tools: reading files, editing code, running commands in the terminal.
-5.  **Observation** - Results are sent back to the model. The model evaluates what happened.
-6.  **Iteration** - If errors appear (build failures, test issues), Copilot adjusts the plan and tries another approach.
-7.  **Completion** - The loop continues until the task is finished.
+1.  **User input** - You assign an issue or start a session on GitHub.
+2.  **Environment setup** - The coding agent provisions an ephemeral environment (checkout, install dependencies, start MCP servers).
+3.  **Context gathering** - The agent explores the repository, reads files, checks repo structure, and searches for relevant code.
+4.  **Planning** - The LLM plans what actions are needed based on the issue description and gathered context.
+5.  **Action** - The agent modifies code, creates files, or runs commands.
+6.  **Observation** - Results are evaluated. If errors appear (build failures, test issues), the agent adjusts and tries another approach.
+7.  **Completion** - The loop continues until the task is finished. The agent opens a pull request with the proposed changes.
 
-**Key idea:** The coding agent is not just generating code once - it continuously reasons, uses tools, and improves its output until the task is finished. And because tools can be extended through Model Context Protocol, Copilot can also connect to external services or workflows.
+**Key idea:** The coding agent is not just generating code once - it continuously reasons, uses tools, and improves its output until the task is finished. And because tools can be extended through MCP, the agent can also connect to external services or workflows.
 
-### Exercise: Observe the Loop in Agent Mode (Local)
+### Exercise: Observe the Loop on GitHub
 
-Before using the coding agent on GitHub, observe the same loop locally in your IDE:
+Use an active or recently completed coding agent session to observe the plan-act-observe loop in action.
 
-1.  Switch to **Agent** mode in Copilot Chat.
-2.  Run the following prompt:
+Open the **Agents** tab in your repository on GitHub.
 
-```
-Add a "Featured" badge overlay to photos in the gallery grid where the photo has a "featured" tag.
-Update the mock data so at least two photos have this tag.
-Run the build to verify there are no errors.
-```
+Select a session from Step 4 (or any other active session).
 
-Watch the iteration steps and note:
+Walk through the session timeline and identify each phase of the loop:
 
-- Which files Copilot reads first (context gathering)
-- What edits it proposes (action)
-- Whether it runs a build or lint check (validation)
-- If it self-corrects after an error (iteration)
+| Phase                 | What to Look For                                                  |
+| --------------------- | ----------------------------------------------------------------- |
+| **Environment setup** | `actions/checkout`, `Setup Node.js`, `Install dependencies`       |
+| **Context gathering** | `View repository`, `Check repo structure`, `Search`, `View files` |
+| **Planning**          | The agent's written plan describing what it will do               |
+| **Action**            | File edits, code generation, command execution                    |
+| **Observation**       | Build/test results, error analysis, plan adjustments              |
+| **Completion**        | Pull request created with proposed changes                        |
 
-After completion, review the changes and confirm:
+Note whether the agent self-corrected at any point (e.g., fixed a build error, adjusted after a test failure).
 
-- Mock data in `src/lib/mock-photo-data.ts` has featured entries
-- `GalleryGrid.tsx` or `PhotoCard.tsx` renders the badge conditionally
-- The build passes without errors
+**Expected Result:** You can trace each phase of the plan-act-observe loop in the session timeline, seeing how the coding agent iterates to produce a working solution.
 
-**Expected Result:** You see Copilot loop through multiple steps (read → edit → validate → fix) until the feature works end-to-end.
+**💡 Pro Tip:** Well-scoped issues with clear acceptance criteria help the agent plan more effectively and reduce the number of iterations needed.
 
 ---
 
-## 🚀 Step 6: Assign Issues to Copilot
+## 🚀 Step 6: Assign Issues, Track Progress, and Review Pull Requests
 
 ### 6.1 Create and Assign an Issue
 
-One of the simplest ways to use the coding agent is by assigning it to a GitHub issue.
-
-**Exercise:**
-
-Go to your repository on GitHub and create a new issue with the following title and description:
+1.  Go to your repository on GitHub and click **New issue**.
+2.  Enter the following title and description:
 
 **Title:** `Add a photo count badge to each gallery collection card`
 
-**Description:**
+**Description (copy and paste into the issue body):**
 
-Assign **GitHub Copilot** as the assignee (select Copilot just like you would assign a teammate).
+> Update the explore page to display the number of photos in each collection as a small badge on the collection card.
+>
+> Acceptance criteria:
+>
+> - Each collection card shows a badge with the photo count
+> - Badge uses the existing Tailwind design system
+> - Badge is visible in both light and dark mode
+> - No breaking changes to existing functionality
 
-Observe that you are automatically assigned to the issue as well, keeping you in the loop.
+1.  Click **Submit new issue**.
+2.  Assign **GitHub Copilot** as the assignee.
 
-Wait for Copilot to begin working on the issue.
+### 6.2 Track Progress and Review the Pull Request
 
-### 6.2 Track Progress
-
-1.  Navigate to the **Agents** tab in your repository.
-2.  Find the session associated with your issue.
-3.  Watch the timeline as Copilot:
-    - Analyzes the issue description
-    - Plans the implementation steps
-    - Reads relevant files
-    - Makes code changes
-    - Runs tests or builds
-
-**Expected Result:** Copilot opens a pull request with the proposed changes when the task is complete.
-
----
-
-## 📝 Step 7: Review and Create Pull Requests
-
-### 7.1 Review Copilot's Pull Request
-
-1.  Open the pull request created by Copilot from Step 6.
-2.  Click **View Session** to see Copilot's workflow and decision-making process.
-3.  Return to the PR and select **View Changes** to inspect the code modifications.
-4.  Review the changes:
-    - Are the acceptance criteria from the issue met?
+1.  Navigate to the **Agents** tab and find the session for your issue.
+2.  Watch the timeline as Copilot analyzes the issue, reads files, makes changes, and runs builds.
+3.  When complete, open the pull request Copilot created.
+4.  Click **View Session** to see Copilot's workflow and decisions.
+5.  Select **View Changes** and review the code:
+    - Are the acceptance criteria met?
     - Does the code follow the project's conventions (TypeScript, Tailwind, component patterns)?
     - Are there any issues you would flag in a normal code review?
 
-### 7.2 Create a PR from Chat
+### 6.3 Create a PR Directly from the Agents Tab
 
-Instead of starting with an issue, you can also create a pull request directly from the Agents page.
+Instead of starting with an issue, you can create a pull request directly from the Agents tab.
 
 **Exercise:**
 
 1.  Go to the **Agents** tab on GitHub.
-2.  Choose your repository and describe the change:
+2.  In the **Sessions** input field, type the following task description:
 
 ```
 Add a "Load More" button to the bottom of the gallery page that loads additional photos from mock data when clicked. Use the existing Tailwind button styles and include a loading state.
 ```
 
-1.  Observe how Copilot:
-    - Analyzes the request
-    - Works through the implementation
-    - Generates a pull request with the proposed changes
+1.  Confirm the correct repository is selected in the dropdown and that **Agent: Copilot** is shown, as its selected by default.
+2.  Click the **send button** (arrow icon) to start the session.
+3.  Observe how Copilot analyzes the request, works through the implementation, and generates a pull request.
 
-### 7.3 Use Copilot for Code Review
-
-You can also assign Copilot to review pull requests, just like assigning issues.
-
-**Exercise:**
+### 6.4 Use Copilot as a Code Reviewer
 
 1.  Open any existing pull request in your repository (or one created by Copilot).
 2.  Assign **Copilot** as a reviewer.
@@ -320,40 +345,61 @@ You can also assign Copilot to review pull requests, just like assigning issues.
 
 ---
 
-## 🔌 Step 8: Extend the Coding Agent with MCP
+## 🔌 Step 7: Extend the Coding Agent with MCP
 
 MCP (Model Context Protocol) lets you connect the coding agent to **external tools and services**, so it can go beyond the repository and interact with other systems.
 
-### 8.1 Understand MCP Configuration for the Coding Agent
+### 7.1 Understand MCP Configuration for the Coding Agent
 
-As a repository administrator, you can configure MCP servers in the repository settings using a JSON configuration that defines which external tools Copilot can access.
+MCP servers for the coding agent are configured in the **repository settings on GitHub**, not in `.vscode/mcp.json` (which is for local IDE use only).
 
-**Exercise: Review the existing MCP configuration**
+**Exercise: Review MCP configuration**
 
-1.  Open `.vscode/mcp.json` in your workspace (created in the Customize Copilot demo).
-2.  Review the configured servers and the tools they expose.
+1.  Go to your repository on GitHub.
+2.  Navigate to **Settings → Copilot → Coding agent**.
+3.  Check if any MCP servers are configured. If none are configured yet, you can add one using a JSON configuration like:
+
+```
+[
+  {
+    "type": "http",
+    "url": "https://api.githubcopilot.com/mcp/",
+    "name": "github"
+  }
+]
+```
+
+1.  Note which tools are exposed by the configured MCP server(s).
 
 **How MCP extends the coding agent:**
 
-- The coding agent can **pull information** from services like Sentry, Notion, or Azure during its workflow
-- It can **interact with APIs** to gather context or perform actions
-- This allows Copilot to integrate with your broader development ecosystem
+- The coding agent can **call MCP tools** during its workflow (e.g., `list_issues`, `list_pull_requests`, `get_commit` from the GitHub MCP server)
+- External MCP servers can connect to third-party services like Sentry, Notion, or Azure
+- This allows the agent to gather context beyond what's in the repository
 
-### 8.2 Exercise: Use MCP Tools with the Coding Agent
+### 7.2 Exercise: Use MCP Tools with the Coding Agent
 
-Create a new issue in your repository:
+This exercise uses the **GitHub MCP server**, which provides tools like `list_issues`, `list_pull_requests`, `search_code`, and `get_commit`.
 
-**Title:** `Summarize recent repository activity and suggest next priorities`
+1.  Go to the **Agents** tab on GitHub.
+2.  In the **Sessions** input field, type the following task:
 
-**Description:**
+```
+Using available MCP tools, list all open issues in this repository and create a markdown file at docs/issue-summary.md that summarizes them grouped by any labels. Include the issue number, title, and assignee for each.
+```
 
-Assign Copilot to the issue.
+1.  Click the **send button** to start the session.
+2.  In the session timeline, watch for **MCP server start** followed by **MCP tool calls**. Look for steps like:
+    - `list_issues` - fetching the current open issues from GitHub
+    - File creation - writing the summary document
+3.  Validate the result:
+    - Does the generated `docs/issue-summary.md` reflect the actual open issues in your repository?
+    - Did the agent use MCP tools (visible as tool call steps in the timeline), or did it guess the data?
+    - Is the summary accurate and up to date?
 
-Observe whether Copilot discovers and uses MCP tools during the session.
+**Expected Result:** The agent calls the GitHub MCP `list_issues` tool to fetch live data, then creates a summary file grounded in real repository state rather than hallucinating issue details.
 
-**Expected Result:** Copilot fetches live data from GitHub via MCP tools and combines it with repository context to produce a meaningful summary.
-
-**💡 Pro Tip:** MCP makes the coding agent more capable for complex tasks that require context from outside the repository - such as checking error monitoring services, retrieving documentation, or querying project management tools.
+**💡 Pro Tip:** If you don't see MCP tool calls in the session, check that the MCP server is properly configured in your repository's Copilot coding agent settings.
 
 ---
 
@@ -364,11 +410,11 @@ Mark each item as you complete it:
 - Understand the difference between agent mode (IDE) and coding agent (GitHub)
 - Committed and pushed local changes to GitHub
 - Explored the Agents tab and Mission Control on GitHub
-- Reviewed existing custom agents and agent skills in the repository
-- Observed the plan-act-observe loop in agent mode locally
-- Created and assigned an issue to Copilot
-- Reviewed a Copilot-generated pull request and viewed the session details
-- Created a pull request directly from the Agents page
+- Assigned an issue using a custom agent (security-review)
+- Tested whether an agent skill gets picked up by relevance
+- Observed the plan-act-observe loop in a coding agent session
+- Created an issue, tracked progress, and reviewed the resulting PR
+- Created a pull request directly from the Agents tab
 - Used Copilot as a code reviewer on a pull request
 - Understood how MCP extends the coding agent
 
@@ -464,6 +510,16 @@ A well-scoped issue includes:
 
 **Discussion:** What makes the strong issue more effective for the coding agent? Which parts give the agent the most useful context?
 
+**Answer points:**
+
+- **Clear title** tells the agent exactly what's broken - it can search for related code immediately instead of guessing what "fix the gallery" means.
+- **Steps to reproduce** give the agent a concrete scenario to reason about. It can trace the code path from tag filter selection through category switching.
+- **Expected behavior** defines what "fixed" looks like, so the agent knows when it's done.
+- **Acceptance criteria** act as a checklist the agent can verify against - it can run tests, check for console errors, and confirm each item.
+- **Relevant files** are the most directly useful context - they tell the agent exactly where to start reading instead of scanning the entire codebase.
+
+The weak issue forces the agent to guess what's wrong, where to look, and what success looks like. The strong issue eliminates ambiguity at every step.
+
 ### 1.3 Exercise: Write Your Own Well-Scoped Issue
 
 1.  Think of a small improvement or bug fix for the Photo Gallery application.
@@ -473,6 +529,32 @@ A well-scoped issue includes:
     - Acceptance criteria (at least 3 items)
     - Relevant files in the codebase
 3.  Create the issue on GitHub but **do not assign it yet** - you'll use it in a later step.
+
+**Example solution**
+
+**Title:** `Add keyboard navigation support to the photo carousel`
+
+**Description:**
+
+The PhotoCarousel component does not respond to keyboard input. Users navigating with a keyboard cannot move between photos using arrow keys.
+
+**Steps to reproduce:**
+
+1.  Open the gallery page and click on a photo to open the carousel
+2.  Press the left or right arrow keys
+3.  Observe that nothing happens
+
+**Expected behavior:** Pressing the left/right arrow keys should navigate to the previous/next photo in the carousel.
+
+**Acceptance criteria:**
+
+- Left arrow key navigates to the previous photo
+- Right arrow key navigates to the next photo
+- Escape key closes the carousel
+- Focus is trapped within the carousel while it is open
+- Existing click-based navigation still works
+
+**Relevant files:** `src/components/gallery/PhotoCarousel.tsx`, `src/components/gallery/GalleryGrid.tsx`
 
 ---
 
