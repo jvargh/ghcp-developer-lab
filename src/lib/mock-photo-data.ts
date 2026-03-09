@@ -146,11 +146,3 @@ export const mockPhotos: Photo[] = [
   },
 ];
 
-// Function that filters photos by tag name, sorts them by date in descending order,
-// and returns only the top N results
-export function getPhotosByTag(tag: string, limit: number = 10): Photo[] {
-  return mockPhotos
-    .filter(photo => photo.tags.includes(tag))
-    .sort((a, b) => new Date(b.dateTaken!).getTime() - new Date(a.dateTaken!).getTime())
-    .slice(0, limit);
-}
