@@ -112,34 +112,6 @@ export const mockPhotos: Photo[] = [
   }
 ];
 
-// Function that filters photos by tag name, sorts them by date in descending order,
-// and returns only the top N results
-export function getPhotosByTag(tag: string, limit: number = 5): Photo[] {
-  return mockPhotos
-    .filter(photo => photo.tags.includes(tag))
-    .sort((a, b) => new Date(b.dateTaken || '').getTime() - new Date(a.dateTaken || '').getTime())
-    .slice(0, limit);
-} 
 
-// Function that groups photos by their category and returns an object where
-// keys are category names and values are arrays of photos
-export function groupPhotosByCategory(): Record<string, Photo[]> {
-  return mockPhotos.reduce((acc, photo) => {
-    const category = photo.tags[0] || 'Uncategorized';
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(photo);
-    return acc;
-  }, {} as Record<string, Photo[]>);
-}
-
-// Function to search photos by title with case-insensitive partial matching
-export function searchPhotosByTitle(query: string, limit: number = 5): Photo[] {
-  const lowerCaseQuery = query.toLowerCase();
-  return mockPhotos
-    .filter(photo => photo.title.toLowerCase().includes(lowerCaseQuery))
-    .slice(0, limit);
-}
 
 
