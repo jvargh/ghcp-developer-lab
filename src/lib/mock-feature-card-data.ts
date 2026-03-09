@@ -1,12 +1,14 @@
 import { Upload, Users, Eye, LucideIcon } from "lucide-react";
 
-interface FeatureCard {
+export interface FeatureCard {
   icon: LucideIcon;
   title: string;
   description: string;
   iconColor: string;
+  badge?: string;
 }
 
+/** Feature highlights displayed on the landing page to showcase key application capabilities */
 export const featureCardsData: FeatureCard[] = [
   {
     icon: Upload,

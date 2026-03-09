@@ -10,7 +10,41 @@ export interface Photo {
   dateTaken?: string;
 }
 
+/** Sample photo entries for gallery display and filtering, sorted by date taken descending */
 export const mockPhotos: Photo[] = [
+  {
+    id: '10',
+    url: '/placeholder-10.jpg',
+    title: 'Morning Mist Valley',
+    tags: ['landscape', 'morning', 'fog', 'nature'],
+    likes: 178,
+    downloads: 67,
+    views: 1843,
+    photographer: 'Rachel Green',
+    dateTaken: '2024-01-20'
+  },
+  {
+    id: '11',
+    url: '/placeholder-11.jpg',
+    title: 'Coastal Lighthouse',
+    tags: ['architecture', 'ocean', 'coastal', 'travel'],
+    likes: 245,
+    downloads: 102,
+    views: 2765,
+    photographer: 'Nathan Brooks',
+    dateTaken: '2024-01-18'
+  },
+  {
+    id: '12',
+    url: '/placeholder-12.jpg',
+    title: 'Autumn Forest Trail',
+    tags: ['nature', 'forest', 'autumn', 'hiking'],
+    likes: 319,
+    downloads: 134,
+    views: 3590,
+    photographer: 'Clara Nguyen',
+    dateTaken: '2024-01-16'
+  },
   {
     id: '1',
     url: '/placeholder-1.jpg',
@@ -109,9 +143,14 @@ export const mockPhotos: Photo[] = [
     views: 4321,
     photographer: 'Tom Anderson',
     dateTaken: '2023-12-20'
-  }
+  },
 ];
 
-
-
-
+// Function that filters photos by tag name, sorts them by date in descending order,
+// and returns only the top N results
+export function getPhotosByTag(tag: string, limit: number = 10): Photo[] {
+  return mockPhotos
+    .filter(photo => photo.tags.includes(tag))
+    .sort((a, b) => new Date(b.dateTaken!).getTime() - new Date(a.dateTaken!).getTime())
+    .slice(0, limit);
+}

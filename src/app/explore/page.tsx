@@ -3,11 +3,10 @@
 import { useState } from 'react';
 import { Tag, Eye, Heart, Download, Layers } from 'lucide-react';
 import { Hero, SectionContainer, SectionTitle } from '@/components/ui';
-import { getPhotosByTag, groupPhotosByCategory, Photo } from '@/lib/mock-photo-data';
+import { getPhotosByTag, Photo } from '@/lib/mock-photo-data';
+import { AVAILABLE_TAGS } from '@/lib/mock-tag-data';
 
 export default function ExplorePage() {
-  const categories = groupPhotosByCategory();
-  const categoryNames = Object.keys(categories);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [tagResults, setTagResults] = useState<Photo[]>([]);
 
@@ -32,7 +31,7 @@ export default function ExplorePage() {
       <SectionContainer>
         <SectionTitle title="Filter by Tag" />
         <div className="flex flex-wrap gap-2 mb-8">
-          {categoryNames.map(tag => (
+          {AVAILABLE_TAGS.map(tag => (
             <button
               key={tag}
               onClick={() => handleTagClick(tag)}
@@ -44,11 +43,6 @@ export default function ExplorePage() {
             >
               <Tag className="h-3.5 w-3.5" />
               {tag}
-              <span className={`ml-1 text-xs ${
-                selectedTag === tag ? 'text-blue-200' : 'text-slate-400'
-              }`}>
-                ({categories[tag].length})
-              </span>
             </button>
           ))}
         </div>
@@ -74,26 +68,30 @@ export default function ExplorePage() {
 
       {/* Categories Grid */}
       <SectionContainer bgColor="bg-white/30 dark:bg-slate-800/30">
-        <SectionTitle title="All Categories" />
+        <SectionTitle title="All Tags" />
         <div className="space-y-12">
-          {categoryNames.map(category => (
-            <div key={category}>
-              <div className="flex items-center gap-2 mb-4">
-                <Layers className="h-5 w-5 text-blue-600" />
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                  {category}
-                </h3>
-                <span className="text-sm text-slate-500 dark:text-slate-400">
-                  ({categories[category].length} {categories[category].length === 1 ? 'photo' : 'photos'})
-                </span>
+          {AVAILABLE_TAGS.map(tag => {
+            const photos = getPhotosByTag(tag);
+            if (photos.length === 0) return null;
+            return (
+              <div key={tag}>
+                <div className="flex items-center gap-2 mb-4">
+                  <Layers className="h-5 w-5 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                    {tag}
+                  </h3>
+                  <span className="text-sm text-slate-500 dark:text-slate-400">
+                    ({photos.length} {photos.length === 1 ? 'photo' : 'photos'})
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {photos.map((photo, index) => (
+                    <PhotoCard key={photo.id} photo={photo} index={index} />
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categories[category].map((photo, index) => (
-                  <PhotoCard key={photo.id} photo={photo} index={index} />
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </SectionContainer>
     </div>

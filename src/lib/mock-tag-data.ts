@@ -1,9 +1,10 @@
 export interface TagCategory {
   name: string;
   tags: string[];
+  description?: string;
 }
 
-// Organizing tags by categories for better structure
+/** Organizes available tags into logical categories for structured filtering */
 export const PHOTO_TAGS = {
   SUBJECT: [
     'landscape',
@@ -27,7 +28,7 @@ export const PHOTO_TAGS = {
   ]
 } as const;
 
-// Flat array of all available tags (for backwards compatibility)
+/** Flat array of all available tags derived from PHOTO_TAGS for backwards compatibility */
 export const AVAILABLE_TAGS = Object.values(PHOTO_TAGS)
   .flat()
   .sort() as string[];

@@ -1,9 +1,12 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { Upload, X, Image as ImageIcon, CheckCircle } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FileRejection, useDropzone } from 'react-dropzone';
+import { Upload, X, Image as ImageIcon, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 interface UploadedFile {
   id: string;
@@ -21,10 +24,49 @@ interface UploadZoneProps {
 
 export function UploadZone({ onUpload, maxFiles = 10, className = "" }: UploadZoneProps) {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const timersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    const newFiles = acceptedFiles.map(file => ({
-      id: Math.random().toString(36).substring(2),
+  // Clean up timers and object URLs on unmount
+  useEffect(() => {
+    return () => {
+      timersRef.current.forEach(id => clearTimeout(id));
+      timersRef.current.forEach(id => clearInterval(id));
+      uploadedFiles.forEach(f => URL.revokeObjectURL(f.preview));
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onDrop = useCallback((acceptedFiles: File[], rejections: FileRejection[]) => {
+    setErrorMessage(null);
+
+    // Handle rejected files
+    if (rejections.length > 0) {
+      const reasons = rejections.map(r => {
+        const name = r.file.name;
+        const codes = r.errors.map(e => e.code);
+        if (codes.includes('file-too-large')) return `${name}: exceeds 10MB limit`;
+        if (codes.includes('file-invalid-type')) return `${name}: unsupported file type`;
+        return `${name}: rejected`;
+      });
+      setErrorMessage(reasons.join('. '));
+    }
+
+    // Enforce cumulative maxFiles limit
+    const slotsAvailable = maxFiles - uploadedFiles.length;
+    if (slotsAvailable <= 0) {
+      setErrorMessage(`Maximum of ${maxFiles} files reached. Remove some files first.`);
+      return;
+    }
+    const filesToAdd = acceptedFiles.slice(0, slotsAvailable);
+    if (filesToAdd.length < acceptedFiles.length) {
+      setErrorMessage(prev => 
+        [prev, `Only ${filesToAdd.length} of ${acceptedFiles.length} files added (limit: ${maxFiles}).`].filter(Boolean).join(' ')
+      );
+    }
+
+    const newFiles = filesToAdd.map(file => ({
+      id: crypto.randomUUID(),
       file,
       preview: URL.createObjectURL(file),
       status: 'uploading' as const,
@@ -44,9 +86,11 @@ export function UploadZone({ onUpload, maxFiles = 10, className = "" }: UploadZo
           )
         );
       }, 200);
+      timersRef.current.add(interval);
 
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         clearInterval(interval);
+        timersRef.current.delete(interval);
         setUploadedFiles(prev => 
           prev.map(f => 
             f.id === fileObj.id 
@@ -55,10 +99,11 @@ export function UploadZone({ onUpload, maxFiles = 10, className = "" }: UploadZo
           )
         );
       }, 2000);
+      timersRef.current.add(timeout);
     });
 
-    onUpload?.(acceptedFiles);
-  }, [onUpload]);
+    onUpload?.(filesToAdd);
+  }, [onUpload, maxFiles, uploadedFiles.length]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -66,6 +111,7 @@ export function UploadZone({ onUpload, maxFiles = 10, className = "" }: UploadZo
       'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.webp']
     },
     maxFiles,
+    maxSize: MAX_FILE_SIZE,
     multiple: true,
   });
 
@@ -111,6 +157,29 @@ export function UploadZone({ onUpload, maxFiles = 10, className = "" }: UploadZo
           </div>
         </div>
 
+      {/* Error Message */}
+      <AnimatePresence>
+        {errorMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="mt-4 flex items-start gap-3 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800"
+          >
+            <AlertCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm text-red-700 dark:text-red-400">{errorMessage}</p>
+            </div>
+            <button
+              onClick={() => setErrorMessage(null)}
+              className="text-red-400 hover:text-red-600 dark:hover:text-red-300"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Upload Progress */}
       <AnimatePresence>
         {uploadedFiles.length > 0 && (
@@ -137,14 +206,21 @@ export function UploadZone({ onUpload, maxFiles = 10, className = "" }: UploadZo
                   </button>
                   
                   <div className="relative aspect-square mb-3 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700">
-                    <img 
+                    <Image 
                       src={fileObj.preview} 
                       alt={fileObj.file.name}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      unoptimized
                     />
                     {fileObj.status === 'success' && (
                       <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
                         <CheckCircle className="h-8 w-8 text-green-500" />
+                      </div>
+                    )}
+                    {fileObj.status === 'error' && (
+                      <div className="absolute inset-0 bg-red-500/20 flex items-center justify-center">
+                        <AlertCircle className="h-8 w-8 text-red-500" />
                       </div>
                     )}
                   </div>
@@ -174,6 +250,12 @@ export function UploadZone({ onUpload, maxFiles = 10, className = "" }: UploadZo
                       <div className="flex items-center gap-2 text-green-600 text-sm">
                         <CheckCircle className="h-4 w-4" />
                         <span>Upload complete</span>
+                      </div>
+                    )}
+                    {fileObj.status === 'error' && (
+                      <div className="flex items-center gap-2 text-red-600 text-sm">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>Upload failed</span>
                       </div>
                     )}
                   </div>

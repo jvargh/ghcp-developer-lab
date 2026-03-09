@@ -1,15 +1,36 @@
-import { FolderOpen, Users, BarChart3 } from "lucide-react";
+import { FolderOpen, Users, BarChart3, LucideIcon } from "lucide-react";
 
-type StatColor = 'blue' | 'green' | 'purple' | 'orange';
+export type StatColor = 'blue' | 'green' | 'purple' | 'orange';
 
-export const dashboardStats = [
-    { label: "Total Photos", value: "1,234", icon: FolderOpen, color: 'blue' as StatColor },
-    { label: "Active Galleries", value: "28", icon: FolderOpen, color: 'green' as StatColor },
-    { label: "Client Projects", value: "12", icon: Users, color: 'purple' as StatColor },
-    { label: "This Month Views", value: "45,678", icon: BarChart3, color: 'orange' as StatColor },
+export interface DashboardStat {
+    label: string;
+    value: string;
+    icon: LucideIcon;
+    color: StatColor;
+    trend?: string;
+}
+
+export interface RecentGallery {
+    id: number;
+    name: string;
+    type: string;
+    photos: number;
+    views: number;
+    status: string;
+    lastUpdated: string;
+    clientEmail?: string;
+}
+
+/** Aggregate statistics displayed on the admin dashboard overview */
+export const dashboardStats: DashboardStat[] = [
+    { label: "Total Photos", value: "1,234", icon: FolderOpen, color: 'blue' },
+    { label: "Active Galleries", value: "28", icon: FolderOpen, color: 'green' },
+    { label: "Client Projects", value: "12", icon: Users, color: 'purple' },
+    { label: "This Month Views", value: "45,678", icon: BarChart3, color: 'orange' },
 ];
 
-export const recentGalleries = [
+/** Recently updated galleries for the admin panel, sorted by last updated descending */
+export const recentGalleries: RecentGallery[] = [
     {
         id: 1,
         name: "Wedding - Sarah & John",
@@ -17,7 +38,7 @@ export const recentGalleries = [
         photos: 156,
         views: 234,
         status: "Active",
-        lastUpdated: "2 hours ago"
+        lastUpdated: "2024-01-20"
     },
     {
         id: 2,
@@ -26,7 +47,7 @@ export const recentGalleries = [
         photos: 89,
         views: 1234,
         status: "Published",
-        lastUpdated: "1 day ago"
+        lastUpdated: "2024-01-19"
     },
     {
         id: 3,
@@ -35,7 +56,7 @@ export const recentGalleries = [
         photos: 234,
         views: 5678,
         status: "Published",
-        lastUpdated: "3 days ago"
+        lastUpdated: "2024-01-17"
     },
     {
         id: 4,
@@ -44,6 +65,6 @@ export const recentGalleries = [
         photos: 67,
         views: 0,
         status: "Draft",
-        lastUpdated: "1 week ago"
+        lastUpdated: "2024-01-13"
     }
 ];
