@@ -405,3 +405,11 @@ Mark off each item as you complete it:
 - Understood when to use instructions vs prompt files vs custom agents
 - Reviewed Agent Skills structure and authored one skill outline
 - Connected or inspected MCP tools locally
+
+---
+
+## 🚀 What's Next?
+
+Congratulations! You've configured Copilot to match your workflow with custom instructions, prompt files, agents, skills, and MCP. Next, learn how to collaborate in dedicated Copilot Spaces.
+
+👉 [**Start Copilot Spaces Demo**](./copilot-spaces.md)
