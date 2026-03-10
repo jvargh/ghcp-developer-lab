@@ -360,13 +360,15 @@ MCP servers for the coding agent are configured in the **repository settings on 
 3.  Check if any MCP servers are configured. If none are configured yet, you can add one using a JSON configuration like:
 
 ```
-[
-  {
-    "type": "http",
-    "url": "https://api.githubcopilot.com/mcp/",
-    "name": "github"
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "tools": []
+    }
   }
-]
+}
 ```
 
 1.  Note which tools are exposed by the configured MCP server(s).
