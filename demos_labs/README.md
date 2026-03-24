@@ -2,6 +2,9 @@
 
 This folder contains step-by-step demo guides for learning and practicing GitHub Copilot features in the Photo Gallery & Portfolio application. Each demo builds on the previous one, helping you master Copilot’s capabilities in a real-world Next.js project.
 
+[Presentation](https://github.com/user-attachments/files/26226509/en-v022026-GitHub.Copilot.intermediate.pdf)
+
+
 ## Workshop Lab
 
 ### AI-Assisted Project Development ([ghcp-ai-assisted-project-template](https://github.com/jvargh/ghcp-ai-assisted-project-template))
