@@ -4,26 +4,26 @@ A professional photo gallery and portfolio application built with Next.js 15, Ty
 
 ## Demos
 
-All demo guides are in the [`demos/`](demos/) folder. Work through them in order:
+All demo guides are in the [`demos_labs/`](demos_labs/) folder. Work through them in order:
 
-| #   | Demo                                                    | Description                                                            |
-| --- | ------------------------------------------------------- | ---------------------------------------------------------------------- |
-| 1   | [Features Demo](demos/features-demo.md)                 | Copilot core features — chat commands, code generation, AI suggestions |
-| 2   | [Engineering Practices](demos/engineering-practices.md) | Debugging suggestions, exporting chats, system prompts                 |
-| 3   | [Customize Copilot](demos/customize-copilot.md)         | Premium usage, model switching, prompt files, chat modes, MCP servers  |
-| 4   | [Copilot Spaces](demos/copilot-spaces.md)               | Collaborative Spaces — goals, context files, shared development        |
-| 5   | [Coding Agent](demos/coding-agent.md)                   | Copilot as a coding agent — issue assignment, PR review, iteration     |
-| 6   | [Copilot CLI](demos/copilot-cli.md)                     | Copilot in the terminal — CLI commands, fleet subagents, code review   |
+| #   | Demo                                                         | Description                                                            |
+| --- | ------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| 1   | [Features Demo](demos_labs/features-demo.md)                 | Copilot core features — chat commands, code generation, AI suggestions |
+| 2   | [Engineering Practices](demos_labs/engineering-practices.md) | Debugging suggestions, exporting chats, system prompts                 |
+| 3   | [Customize Copilot](demos_labs/customize-copilot.md)         | Premium usage, model switching, prompt files, chat modes, MCP servers  |
+| 4   | [Copilot Spaces](demos_labs/copilot-spaces.md)               | Collaborative Spaces — goals, context files, shared development        |
+| 5   | [Coding Agent](demos_labs/coding-agent.md)                   | Copilot as a coding agent — issue assignment, PR review, iteration     |
+| 6   | [Copilot CLI](demos_labs/copilot-cli.md)                     | Copilot in the terminal — CLI commands, fleet subagents, code review   |
 
-See the [demos README](demos/README.md) for full descriptions.
+See the [demos_labs README](demos_labs/README.md) for full descriptions.
 
 ### Creating a New Demo
 
 1. Open GitHub Copilot Chat.
 2. Type the prompt `/create-copilot-demo` with an explanation of your demo idea.
-3. Copilot will generate a new demo file in the `demos/` directory.
+3. Copilot will generate a new demo file in the `demos_labs/` directory.
 4. Fill in remaining sections with detailed instructions, examples, and expected results.
-5. Add the overview, key skills, and demo link to the [demos README](demos/README.md).
+5. Add the overview, key skills, and demo link to the [demos_labs README](demos_labs/README.md).
 
 ## Copilot Customization
 
@@ -107,7 +107,7 @@ src/
 ├── skills/                 # Copilot skill definitions
 ├── agents/                 # Custom agent definitions
 └── chatmodes/              # Custom chat modes
-demos/                      # Step-by-step demo guides
+demos_labs/                 # Step-by-step demo guides
 ```
 
 ## Tech Stack
