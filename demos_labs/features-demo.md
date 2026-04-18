@@ -97,14 +97,23 @@ Explain when to use Ask mode, Plan mode, and Agent mode for this repository
 
 **Action:**
 
-1.  **Open the Command Palette:** Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac)
-2.  **Type:** `Copilot` to see all available Copilot commands
-3.  **Try these commands** (exact names may vary slightly by version):
-    - `GitHub Copilot: Focus on Chat View` - Opens the Copilot Chat panel
-    - `GitHub Copilot: Enable/Disable Completions` - Toggle inline suggestions on/off
-    - `GitHub Copilot: Open Completions Panel` - See multiple suggestion alternatives
+**Open the Command Palette:** Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac)
 
-**Expected Result:** You'll see the full list of Copilot commands available in your IDE.
+**Type:** `Copilot` to see all available Copilot commands
+
+**Try these commands** (exact names may vary slightly by version):
+
+- `GitHub Copilot: Focus on Chat View` - Opens the Copilot Chat panel
+- `GitHub Copilot: Open Completions Panel` - See multiple suggestion alternatives
+
+**Verify recommended settings:** Go to **Settings** (`Ctrl+,` / `Cmd+,`) and confirm the following are enabled:
+
+- `workbench.browser.openLocalhostLinks` → `true`
+- `workbench.browser.enableChatTools` → `true`
+- `editor.inlineSuggest.enabled` → `true`
+- `editor.inlineSuggest.syntaxHighlightingEnabled` → `true`
+
+**Expected Result:** You'll see the full list of Copilot commands available in your IDE, and the recommended settings will be enabled for the best experience.
 
 ### 1.3 Keyboard Shortcuts and Productivity Workflows
 
@@ -131,20 +140,20 @@ Explain when to use Ask mode, Plan mode, and Agent mode for this repository
 
 **Action - Steering and queueing:**
 
-1. Start a longer request in Agent mode.
-2. While it is still running, send another message and choose one of:
-   - **Add to Queue** (run next)
-   - **Steer with Message** (redirect current flow)
-   - **Stop and Send** (cancel current and run new)
+1.  Start a longer request in Agent mode.
+2.  While it is still running, send another message and choose one of:
+    - **Add to Queue** (run next)
+    - **Steer with Message** (redirect current flow)
+    - **Stop and Send** (cancel current and run new)
 
 **Expected Result:** You can keep momentum during long tasks without waiting for the agent to finish before redirecting it.
 
 **Action - Thinking Effort:**
 
-1. Open the model picker in Copilot Chat (click the model name near the input box).
-2. Select a reasoning model (e.g., `o3` or `o4-mini`).
-3. Adjust the **Thinking** slider — choose **Low**, **Medium**, or **High** based on task complexity.
-4. Send a prompt like: `Analyse the architecture of this project and suggest structural improvements.`
+1.  Open the model picker in Copilot Chat (click the model name near the input box).
+2.  Select a reasoning model (e.g., `o3` or `o4-mini`).
+3.  Adjust the **Thinking** slider — choose **Low**, **Medium**, or **High** based on task complexity.
+4.  Send a prompt like: `Analyse the architecture of this project and suggest structural improvements.`
 
 **Expected Result:** Higher thinking effort produces more thorough, step-by-step reasoning — useful for complex planning or architectural questions. Lower effort is faster for simple tasks.
 
@@ -181,15 +190,23 @@ Given this codebase, suggest the top 5 practical improvements for maintainabilit
 
 **Action:**
 
-1.  **Open** `src/components/gallery/GalleryGrid.tsx`
-2.  **Highlight** the filtering logic - select the section where photos are filtered by tags and search query (look for `.filter(` calls). 
-3.  **Open Copilot Chat.** Selection should show up with from and to line numbers. Now type:
+**Open** `src/components/gallery/GalleryGrid.tsx`
+
+**Highlight lines 30–43** — the `filteredPhotos` block that filters the photo array by selected tags and search query. The code to select looks like this:
+
+**Open Copilot Chat.** Your selection should appear as an attachment with the from/to line numbers. Now type just the slash command by itself — no additional prompt needed:
 
 ```
 /explain
 ```
 
-**What this does:** Copilot will explain the highlighted code section in detail - breaking down the filter chain, how tag matching works, and what each conditional branch does.
+> **Note:** `/explain` works on its own. Copilot uses the highlighted code as context, so you don't need to add a description. Just select the code, type `/explain`, and press Enter.
+
+**What this does:** Copilot will explain the highlighted filtering logic in detail, covering:
+
+- How `matchesTags` uses `selectedTags.some()` to check whether any selected tag appears in a photo's tag list (with an empty-selection bypass).
+- How `matchesSearch` performs case-insensitive partial matching against the photo's title, tags, and photographer name.
+- How the two conditions are combined with `&&` so both tag and search filters must pass.
 
 **Expected Result:** A plain-English walkthrough of the selected code, making it easy to understand logic you didn't write.
 
@@ -208,6 +225,7 @@ Copilot will propose a step-by-step plan and it should save it a plan.md file. R
 **💡 Pro Tip:** Use `/plan` before making larger or riskier edits — it gives you a reviewable checklist before the agent writes any code.
 
 ### 2.5 Context-Aware Coding with Inline Chat
+
 **Note:** Ensure that `editor.inlinesuggest.enabled` is enabled in your VS Code settings.
 
 **Goal:** Use inline chat (`Ctrl+I` / `Cmd+I`) to make targeted edits and get explanations directly in the editor.
@@ -392,13 +410,11 @@ In the same file or a new one, type:
 **Outcome:**
 
 1.   Select the generated code from above and in chat run
-``` 
-create an implementation that visualizes these on the web portal
-```
 2.  This should result in updates to `src/app/explore/page.tsx` (and related files if needed). Then open [http://localhost:3000/explore](http://localhost:3000/explore).
 3.  On that page:
-  - **Filter by Tag** section: clicking any tag pill calls `getPhotosByTag(tag, 5)` and displays the top 5 most recent photos matching that tag
-  - **All Categories** section: uses `groupPhotosByCategory()` to show every category with its photos
+
+- **Filter by Tag** section: clicking any tag pill calls `getPhotosByTag(tag, 5)` and displays the top 5 most recent photos matching that tag
+- **All Categories** section: uses `groupPhotosByCategory()` to show every category with its photos
 
 ### 3.5 Alternative Code Suggestions: Multiple Implementations
 
@@ -456,7 +472,21 @@ This gives you a mental model of what good tests look like before generating the
 /tests
 ```
 
-**Expected Result:** Copilot generates a full test file with imports, test setup, and multiple test cases.
+1.  **Save the output:** Copilot generates tests in the chat response but does **not** automatically create a file. Ask the agent to save it:
+
+```
+save this to file
+```
+
+Copilot will create the test file (e.g., `src/components/ui/stats/StatsGrid.test.tsx`).
+
+1.  **Run the tests** to verify they pass:
+
+```
+npx jest src/components/ui/stats/StatsGrid.test.tsx
+```
+
+**Expected Result:** Copilot generates a full test file with imports, test setup, and multiple test cases — and after saving, the tests run and pass.
 
 **Action 2 - Generate tests with a detailed prompt:**
 
@@ -472,6 +502,22 @@ Generate a comprehensive unit test file for src/components/gallery/GalleryGrid.t
 ```
 
 **Expected Result:** A complete test file you can save and run.
+
+1.  **Save the output:** Ask the agent to save it:
+
+```
+save this to file
+```
+
+Copilot will create `src/components/gallery/GalleryGrid.test.tsx`.
+
+1.  **Run the tests** to verify they pass:
+
+```
+npx jest src/components/gallery/GalleryGrid.test.tsx --no-coverage
+```
+
+1.  **Fix any failures:** Pass it on to Copilot to fix.
 
 **Action 3 - AI-assisted test writing with inline chat:**
 
