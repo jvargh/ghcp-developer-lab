@@ -13,6 +13,7 @@ All demo guides are in the [`demos/`](demos/) folder. Work through them in order
 | 3   | [Customize Copilot](demos/customize-copilot.md)         | Premium usage, model switching, prompt files, chat modes, MCP servers  |
 | 4   | [Copilot Spaces](demos/copilot-spaces.md)               | Collaborative Spaces — goals, context files, shared development        |
 | 5   | [Coding Agent](demos/coding-agent.md)                   | Copilot as a coding agent — issue assignment, PR review, iteration     |
+| 6   | [Copilot CLI](demos/copilot-cli.md)                     | Copilot in the terminal — CLI commands, fleet subagents, code review   |
 
 See the [demos README](demos/README.md) for full descriptions.
 
