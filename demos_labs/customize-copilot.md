@@ -4,6 +4,26 @@ At this point, you've explored features, data flow, context engineering, and pro
 
 **Goal:** Reduce repetition, avoid restating context, and get better results by configuring Copilot to match your workflow and standards.
 
+## Table of Contents
+
+- [What You'll Learn](#what-youll-learn)
+- [TL;DR: Customize Copilot](#tldr-customize-copilot)
+- [📌 Customization Comparison](#customization-comparison)
+- [📊 Step 1: Model Switching + Premium Request Awareness](#step-1-model-switching--premium-request-awareness-local)
+  - [1.1 Monitor premium usage in VS Code](#11-monitor-premium-usage-in-vs-code)
+  - [1.2 Compare model behavior on the same task](#12-compare-model-behavior-on-the-same-task)
+- [🧩 Step 2: Custom Responses (Instructions + Prompt Files + Custom Agents)](#step-2-custom-responses-instructions--prompt-files--custom-agents)
+  - [2.1 Scoped instructions files](#21-scoped-instructions-files-instructionsmd)
+  - [2.2 Prompt files](#22-prompt-files-promptmd)
+  - [2.3 Custom agents (local, role-based)](#23-custom-agents-local-role-based)
+  - [2.4 Agent Skills](#24-agent-skills)
+- [🔁 Step 3: Agent Mode Architecture (Behind the Scenes)](#step-3-agent-mode-architecture-behind-the-scenes)
+- [🔌 Step 4: Model Context Protocol (MCP)](#step-4-model-context-protocol-mcp)
+- [✅ Completion Checklist](#completion-checklist)
+- [🚀 What's Next?](#whats-next)
+
+---
+
 ## What You'll Learn
 
 By the end of this demo, you will:
@@ -13,9 +33,9 @@ By the end of this demo, you will:
 - Create role-based custom agents for repeatable tasks
 - Understand Agent Skills and when to use them
 - Understand MCP and how to configure it locally
-- Know when to use each customization type (instructions vs prompt files vs agents)
+- Know when to use each customization type (instructions vs prompt files vs agents vs skills)
 
-**Estimated Time:** 30-35 minutes
+**Estimated Time:** 40-45 minutes
 
 ---
 
@@ -49,31 +69,93 @@ In this section, you'll configure Copilot so you can code seamlessly in your IDE
 
 ### 1.2 Compare model behavior on the same task
 
-Run the same prompt with 2-3 models and compare output quality, speed, and depth.
+You'll run the **same prompt against three models** and compare how each responds — covering code quality, explanation depth, and adherence to project conventions.
 
-**Context files:**
+**Target:** The filter + pagination logic inside `GalleryGrid.tsx` (lines 31–52):
+
+```ts
+// Filter photos based on selected tags and search query
+const filteredPhotos = mockPhotos.filter(photo => {
+  const matchesTags = selectedTags.length === 0 || 
+    selectedTags.some(tag => photo.tags.includes(tag.toLowerCase()));
+  const matchesSearch = searchQuery === "" ||
+    photo.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    photo.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (photo.photographer && photo.photographer.toLowerCase().includes(searchQuery.toLowerCase()));
+  return matchesTags && matchesSearch;
+});
+
+const totalPhotos = filteredPhotos.length;
+const photosPerPage = limit;
+const startIndex = 0;               // ← always 0, pagination is cumulative
+const endIndex = currentPage * photosPerPage;
+const displayedPhotos = filteredPhotos.slice(startIndex, endIndex);
+const hasMore = endIndex < totalPhotos;
+```
+
+> **🟢 Use Ask mode for this exercise.**
+> In the Copilot Chat panel, set the mode dropdown to **Ask** (not Agent or Edit).
+> - **Ask** returns code in the chat window only — nothing is written to disk, making it safe to compare multiple models against the same unchanged file.
+> - **Edit** would stage an inline diff in the editor; you'd have to accept/reject before switching models.
+> - **Agent** autonomously reads files, plans, and applies changes immediately — the file would be modified after the first run and subsequent models would see different input.
+
+**Steps:**
+
+1. Open `src/components/gallery/GalleryGrid.tsx` in VS Code.
+2. Select lines 31–52 (the block above).
+3. Open Copilot Chat, confirm the mode is set to **Ask**, and attach the selection using the paperclip / `#selection`.
+4. Switch to **GPT-4.1** in the model picker. Paste the prompt below and send. Record results in the table — **do not click "Apply"**.
+5. Switch to **Claude Sonnet**. Re-attach `#selection` (file is still unchanged). Send the same prompt. Record results.
+6. Switch to **o4-mini** (or another reasoning model available to you). Re-attach and send again.
+7. Once the table is complete, pick your preferred response and manually apply it to the file.
+
+**Prompt (use exactly as-is for each model):**
 
 ```
-- /src/app/gallery/page.tsx
-- /src/lib/mock-photo-data.ts
-- /src/components/gallery/GalleryGrid.tsx
+The selected code in GalleryGrid.tsx handles filtering and pagination.
+There are two issues I can see:
+1. `startIndex` is hardcoded to 0, which is misleading since pagination is cumulative (not page-based).
+2. The search logic repeats `.toLowerCase()` on every render with no memoization.
+
+Please refactor this block to:
+- Remove or rename the unused `startIndex` variable
+- Extract the filter predicate into a named, memoized `useMemo` with the correct deps
+- Tighten the TypeScript — `searchQuery` comparisons can use a helper to avoid repetition
+- Keep all existing behavior unchanged
+
+Show only the refactored block, not the full file.
 ```
 
-**Prompt:**
+**What to observe per model:**
 
-```
-Refactor this selected function for better performance and readability, and improve the TypeScript types. Keep behavior unchanged.
-```
+| Observation | GPT-4.1 | Claude Sonnet | o4-mini |
+|---|---|---|---|
+| Did it use `useMemo`? | | | |
+| Did it remove/rename `startIndex`? | | | |
+| Did it extract a search helper? | | | |
+| Explanation depth (short / medium / long) | | | |
+| Followed project naming style? | | | |
+| Felt production-ready without edits? | | | |
 
 **Discussion:**
 
-- Which model gave the best balance of accuracy and speed?
-- Which model was most concise vs most detailed?
-- Which one aligned best with project conventions?
+- Which model caught all three issues without extra prompting?
+- Which gave the most useful explanation alongside the code?
+- Did any model introduce behavior changes (e.g., change `currentPage * limit` logic)?
+- Which response would you paste in fastest and move on?
 
 ---
 
 ## 🧩 Step 2: Custom Responses (Instructions + Prompt Files + Custom Agents)
+
+**Quick Reference — when to reach for each type:**
+
+| Type | Use it when… |
+|---|---|
+| **Instructions** | You want a rule applied *always*, to every response in scope — no invocation needed |
+| **Prompt files** | You have a *repeatable task* you invoke on demand (e.g. `/write-test`, `/review-pr`) |
+| **Custom agents** | You want a *role* with a persona, tools, and workflow you switch into explicitly |
+| **Skills** | You have a *multi-step workflow* Copilot should trigger automatically when relevant |
 
 Copilot can adapt to your team workflow without repeating context every time.
 
@@ -218,67 +300,32 @@ Use @frontend-standards to review this component against project conventions and
 
 ---
 
-## 🧭 Step 3: Use Chat Modes Intentionally
+### 2.4 Agent Skills
 
-Copilot Chat has three built-in modes. Each one changes what Copilot can do and how it reasons. Use the mode picker at the top of the Chat panel to switch between them.
-
-| Mode      | What it does                                                   | Can edit files? |
-| --------- | -------------------------------------------------------------- | --------------- |
-| **Ask**   | Answers questions using workspace context. Read-only.          | No              |
-| **Edit**  | Makes targeted edits to files you specify.                     | Yes (scoped)    |
-| **Agent** | Autonomously plans and executes multi-step tasks across files. | Yes (broad)     |
-
-**Exercise: Same prompt, different modes**
-
-Use the following prompt in each mode and compare the results:
-
-```
-Help me plan a new page for creating galleries.
-Include component structure, data flow, validations, and testing plan.
-```
-
-1.  Switch to **Ask** mode and run the prompt. Copilot should return a written plan but make no file changes.
-2.  Switch to **Agent** mode and run the same prompt. Copilot should propose an implementation plan and start creating or editing files.
-3.  Compare: Ask gives you a document to review. Agent gives you working code to accept or reject.
-
-**Key idea:** Choose Ask when you want to think before acting. Choose Agent when you want Copilot to act. Choose Edit when you want precise, scoped changes to specific files.
-
----
-
-## 🧠 Step 4: When to Use What (Decision Guide)
-
-**Rule of thumb:**
-
-- Standards for consistency → custom instructions
-- Reusable tasks for consistency → prompt files
-- Role-driven workflows for customization → custom agents
-
-See the [Customization Comparison](#-customization-comparison) table at the end of this demo for a full side-by-side reference including Agent Skills and MCP.
-
----
-
-## ⚙️ Step 5: Agent Skills
-
-### What skills are
+#### What skills are
 
 Agent Skills let you teach Copilot a repeatable workflow once and reuse it when relevant.
 
 A skill is a folder containing `SKILL.md` plus optional scripts/templates/resources.
 
-### Where to store skills
+#### Where to store skills
 
 - Team scope: `.github/skills/`
 - Personal scope: `~/.copilot/skills/`
 
-### Existing skill in this repo
+#### Existing skill in this repo
 
 - `ui-test-generation` in `.github/skills/ui-test-generation/SKILL.md`
 
-### How skills differ from prompts and agents
+#### How skills differ from prompts and agents
 
 Unlike prompt files (manually invoked) and custom agents (explicitly selected), Agent Skills are **relevance-triggered.** Copilot applies the workflow automatically when your intent matches the skill description. No `/slash` command or `@agent` prefix needed.
 
-### Exercise: Use the existing skill
+#### How skills are discovered in VS Code
+
+In VS Code Copilot Chat (Agent mode), skills in `.github/skills/` are picked up automatically from the workspace. Copilot scans the skill descriptions and triggers the matching one when your intent aligns — no invocation needed. To confirm a skill was used, check the **tool calls** shown inline in the chat response (the collapsible "Used X tool" steps).
+
+#### Exercise: Use the existing skill
 
 1.  Open `.github/skills/ui-test-generation/SKILL.md` and skim the workflow.
 2.  Open a target component, for example `src/components/ui/cards/FeatureCard.tsx`.
@@ -295,9 +342,28 @@ Add UI tests for FeatureCard and include a validation checklist.
 
 **Expected Result:** The UI tests and checklist are produced without restating the workflow steps.
 
+#### Exercise: Debug and Refine Skills
+
+To verify a skill was applied and iterate on it:
+
+1. Open VS Code Copilot Chat in **Agent mode**.
+2. Run the same skill-triggering prompt: `Add UI tests for FeatureCard and include a validation checklist.`
+3. In the chat response, expand the collapsible **tool call steps** to inspect:
+   - Which skill file was read
+   - What steps the skill executed
+   - Which files were accessed or created
+4. If the skill was **not triggered**, check:
+   - Does the `SKILL.md` description match your intent?
+   - Is the skill stored in `.github/skills/` (team scope)?
+   - Are there other skills with overlapping descriptions?
+
+Edit the `SKILL.md` description to be more specific, then re-run your prompt.
+
+**Expected Result:** You understand how to diagnose and improve custom skills using the debug output.
+
 ---
 
-## 🔁 Step 6: Agent Mode Architecture (Behind the Scenes)
+## 🔁 Step 3: Agent Mode Architecture (Behind the Scenes)
 
 Agent mode runs a plan-act-validate loop:
 
@@ -321,7 +387,7 @@ Update the mock data so at least two photos are featured.
 Run the build to verify there are no errors.
 ```
 
-Watch the iteration steps Copilot takes and note:
+Watch the iteration steps Copilot takes and note the below. You can also run this as prompt asking Copilot to get the answers to below:
 
 - Which files it reads first (context gathering)
 - What edits it proposes (action)
@@ -338,7 +404,7 @@ After completion, review the changes and confirm:
 
 ---
 
-## 🔌 Step 7: Model Context Protocol (MCP)
+## 🔌 Step 4: Model Context Protocol (MCP)
 
 MCP is an open standard for structured context sharing between AI clients and external systems.
 
@@ -348,12 +414,12 @@ MCP is an open standard for structured context sharing between AI clients and ex
 - Lets Copilot fetch live data when needed.
 - Enables custom tool integrations for your internal systems.
 
-### Setup: Configure the GitHub MCP server
+### Setup: Configure the GitHub MCP server and Workspace Scoping
 
 1.  Open (or create) `.vscode/mcp.json` in the workspace root.
 2.  Add the following configuration:
 
-```
+```json
 {
   "servers": {
     "github": {
@@ -364,32 +430,52 @@ MCP is an open standard for structured context sharing between AI clients and ex
 }
 ```
 
-1.  Save the file. VS Code will detect the MCP server automatically.
-2.  Switch to **Agent** mode in Copilot Chat.
-3.  Check that MCP tools are available (look for the tools icon or tool list in the chat input area).
+3. Save the file. VS Code will detect the MCP server automatically.
+4. Switch to **Agent** mode in Copilot Chat.
+5. Check that MCP tools are available (look for the tools icon or tool list in the chat input area).
 
 ### Exercise: Use MCP tools in a prompt
 
-1.  In Agent mode, run the following prompt to use a GitHub MCP tool:
+1. Switch to **Agent mode** in Copilot Chat.
+2. First, confirm MCP is connected and authenticated:
 
 ```
-Using available tools, list the open issues in this repository and summarize them.
+Using available tools, who am I authenticated as on GitHub?
+```
+
+Copilot should call a GitHub MCP tool and return your username. If it can't, recheck the `.vscode/mcp.json` config and ensure you are signed into GitHub in VS Code.
+
+3. Now query a real public repo to see MCP fetch live data. Since this project uses Next.js, use the framework's own repo as a meaningful reference:
+
+```
+Using available tools, list the 5 most recently opened issues in vercel/next.js that mention "App Router". Summarize each one in a sentence.
 ```
 
 Observe how Copilot:
+- Selects the right MCP tool (search or list issues)
+- Makes a tool call and receives structured JSON
+- Formats the result as a readable summary
 
-- Discovers available MCP tools from the configured server
-- Selects the appropriate tool (for example, list issues)
-- Makes a tool call and receives structured data
-- Summarizes the result in the chat response
+**Expected Result:** Copilot returns live issue data from a public GitHub repo — no copy-paste, no manual browsing.
 
-Try a second prompt that combines MCP data with workspace context:
+### Exercise: Combine MCP data with a specific file
+
+You can attach a local file alongside an MCP prompt to ground live data in your actual codebase:
+
+1. Attach `src/components/gallery/GalleryGrid.tsx` using the paperclip / `#file`.
+2. Run the following prompt:
 
 ```
-Using available tools, find the most recent pull request and explain how its changes relate to the gallery page code in this repo.
+Using available tools, search GitHub for open issues or discussions in vercel/next.js related to client-side filtering or pagination performance.
+Then review the attached file and suggest if any of those findings apply to it.
 ```
 
-**Expected Result:** Copilot fetches live data from GitHub via MCP tools and combines it with local workspace context to produce a meaningful answer — without you pasting any external data manually.
+Observe how Copilot:
+- Fetches live data from GitHub via MCP
+- Uses the attached file as local context
+- Cross-references both to produce actionable suggestions
+
+**Expected Result:** Copilot merges live public data with your local code — demonstrating how MCP bridges external context into your workspace.
 
 ---
 
@@ -397,14 +483,27 @@ Using available tools, find the most recent pull request and explain how its cha
 
 Mark off each item as you complete it:
 
+### Model & Premium Awareness
 - Compared model outputs and noted premium usage patterns
+- Understood model selection for different task types
+
+### Custom Responses
 - Added/validated repo custom instructions
 - Used existing prompt files and created one new prompt file
-- Explored Plan/Ask/Agent mode differences
+- Explored Ask/Edit/Agent mode differences
 - Defined at least one custom agent in `.github/agents/`
-- Understood when to use instructions vs prompt files vs custom agents
-- Reviewed Agent Skills structure and authored one skill outline
-- Connected or inspected MCP tools locally
+- Understood when to use instructions vs prompt files vs custom agents vs skills
+
+### Agent Skills
+- Reviewed Agent Skills structure and understood relevance-triggering
+- Triggered the `ui-test-generation` skill and confirmed it was applied
+- Verified skill execution via inline tool call steps in Agent mode
+- Refined a skill description and re-ran to confirm the change
+
+### MCP & Integration
+- Connected/inspected MCP tools locally (GitHub server configured)
+- Used MCP data combined with workspace context
+- Attached a file alongside an MCP prompt to combine live data with local code
 
 ---
 
@@ -412,4 +511,4 @@ Mark off each item as you complete it:
 
 Congratulations! You've configured Copilot to match your workflow with custom instructions, prompt files, agents, skills, and MCP. Next, learn how to collaborate in dedicated Copilot Spaces.
 
-👉 [**Start Copilot Spaces Demo**](./copilot-spaces.md)
+👉 [**Start Copilot CLI Demo**](./copilot-cli.md)

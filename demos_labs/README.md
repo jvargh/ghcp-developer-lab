@@ -4,7 +4,6 @@ This folder contains step-by-step demo guides for learning and practicing GitHub
 
 [Presentation](https://github.com/user-attachments/files/26226509/en-v022026-GitHub.Copilot.intermediate.pdf)
 
-
 ## Workshop Lab
 
 ### AI-Assisted Project Development ([ghcp-ai-assisted-project-template](https://github.com/jvargh/ghcp-ai-assisted-project-template))
@@ -13,8 +12,8 @@ This folder contains step-by-step demo guides for learning and practicing GitHub
 
 **Includes:**
 
-*   A sample [Survey App](https://github.com/jvargh/ghcp-ai-assisted-project-template/blob/main/Survey-App.md) requirements document as a working example
-*   `.github/prompts/` directory with reusable prompt file templates
+- A sample [Survey App](https://github.com/jvargh/ghcp-ai-assisted-project-template/blob/main/Survey-App.md) requirements document as a working example
+- `.github/prompts/` directory with reusable prompt file templates
 
 ---
 
@@ -26,17 +25,17 @@ This folder contains step-by-step demo guides for learning and practicing GitHub
 
 **What students will learn from the lab (high level):**
 
-*   The PROSE framework and why prompt quality breaks down in enterprise codebases
-*   Modular instructions (`.instructions.md`) to enforce team standards
-*   Reusable prompts (`.prompt.md`) and structured commands
-*   Multi-agent handoffs (`.agent.md`) for analysis vs. generation
-*   Skills packaging for organization-wide reuse
+- The PROSE framework and why prompt quality breaks down in enterprise codebases
+- Modular instructions (`.instructions.md`) to enforce team standards
+- Reusable prompts (`.prompt.md`) and structured commands
+- Multi-agent handoffs (`.agent.md`) for analysis vs. generation
+- Skills packaging for organization-wide reuse
 
 **Structure at a glance:**
 
-*   90-minute session with Docs and Testing tracks
-*   Hands-on exercises + golden examples for comparison
-*   Scaling section on skills and Copilot CLI
+- 90-minute session with Docs and Testing tracks
+- Hands-on exercises + golden examples for comparison
+- Scaling section on skills and Copilot CLI
 
 ---
 
@@ -48,10 +47,10 @@ This folder contains step-by-step demo guides for learning and practicing GitHub
 Start here to explore Copilot’s core features. Learn how to use chat commands, generate code, and review AI suggestions.  
 **Key Skills:**
 
-*   Discover available Copilot commands
-*   Get project summaries and code explanations
-*   Generate and review code completions
-*   Commit changes with Copilot
+- Discover available Copilot commands
+- Get project summaries and code explanations
+- Generate and review code completions
+- Commit changes with Copilot
 
 ---
 
@@ -61,10 +60,10 @@ Start here to explore Copilot’s core features. Learn how to use chat commands,
 Dive deeper into professional Copilot tools for teams. Inspect Copilot’s decision process, share chat conversations, and explore system prompts for consistent code generation.  
 **Key Skills:**
 
-*   Debug Copilot’s suggestions
-*   Export/import chat conversations
-*   Understand and manage system prompts
-*   Collaborate using shared conversations
+- Debug Copilot’s suggestions
+- Export/import chat conversations
+- Understand and manage system prompts
+- Collaborate using shared conversations
 
 ---
 
@@ -74,35 +73,49 @@ Dive deeper into professional Copilot tools for teams. Inspect Copilot’s decis
 Learn advanced customization techniques. Monitor premium usage, switch models, use prompt files, experiment with chat modes, and set up custom instructions for your team.  
 **Key Skills:**
 
-*   Track Copilot premium usage
-*   Switch between AI models
-*   Create and use prompt files
-*   Utilize chat modes, custom instructions, and MCP servers
+- Track Copilot premium usage
+- Switch between AI models
+- Create and use prompt files
+- Utilize chat modes, custom instructions, and MCP servers
 
 ---
 
-### 4\. Copilot Spaces Demo ([copilot-spaces.md](copilot-spaces.md))
+### 4\. Copilot CLI Demo ([copilot-cli.md](copilot-cli.md))
+
+**Overview:**  
+Master Copilot CLI for terminal-first development workflows. Install Copilot CLI, create custom instructions and hooks, build reusable skills and custom agents, and connect MCP servers for live data access—all from your shell.  
+**Key Skills:**
+
+- Install and authenticate GitHub Copilot CLI
+- Create custom instructions and hooks for terminal workflows
+- Build reusable CLI skills and custom agents
+- Connect MCP servers to external tools
+- Know when to use CLI vs. IDE vs. Spaces vs. Coding Agent
+
+---
+
+### 5\. Copilot Spaces Demo ([copilot-spaces.md](copilot-spaces.md))
 
 **Overview:**  
 Collaborate in dedicated Copilot Spaces. Create a Space, set goals, add context files, and work together to implement new features with AI assistance.  
 **Key Skills:**
 
-*   Create and manage Copilot Spaces
-*   Set development goals
-*   Collaborate and share progress
-*   Implement and test new features
+- Create and manage Copilot Spaces
+- Set development goals
+- Collaborate and share progress
+- Implement and test new features
 
 ---
 
-### 5\. Coding Agent Demo ([coding-agent.md](coding-agent.md))
+### 6\. Coding Agent Demo ([coding-agent.md](coding-agent.md))
 
 **Overview:**  
 Experience GitHub Copilot as a coding agent to accelerate building and enhancing features in your Photo Gallery & Portfolio application.  
 **Key Skills:**
 
-*   Assign Copilot to GitHub issues
-*   Review Copilot-generated pull requests and session details
-*   Practice collaborative code review and iteration
+- Assign Copilot to GitHub issues
+- Review Copilot-generated pull requests and session details
+- Practice collaborative code review and iteration
 
 ---
 

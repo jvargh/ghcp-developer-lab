@@ -6,6 +6,36 @@ This demo focuses on how the coding agent works, when to use it, and how it help
 
 ---
 
+## Table of Contents — Part One
+
+- [What You'll Learn](#what-youll-learn)
+- [📌 Agent Mode vs Coding Agent - Quick Reference](#agent-mode-vs-coding-agent---quick-reference)
+- [🧠 Step 1: Understand the Copilot Coding Agent](#step-1-understand-the-copilot-coding-agent)
+  - [1.1 What is the Coding Agent?](#11-what-is-the-coding-agent)
+  - [1.2 Agent Mode vs Coding Agent](#12-agent-mode-vs-coding-agent)
+- [🚀 Step 2: Commit and Push Your Code to GitHub](#step-2-commit-and-push-your-code-to-github)
+- [🎯 Step 3: Explore the Agents Tab and Mission Control](#step-3-explore-the-agents-tab-and-mission-control)
+  - [3.1 The Agents Tab](#31-the-agents-tab)
+  - [3.2 Mission Control](#32-mission-control)
+- [📚 Step 4: Custom Agents and Agent Skills](#step-4-custom-agents-and-agent-skills)
+  - [4.1 Custom Agents for Issues](#41-custom-agents-for-issues)
+  - [4.2 Agent Skills](#42-agent-skills)
+- [🏗️ Step 5: Agent Architecture - Observe the Plan-Act-Observe Loop](#step-5-agent-architecture---observe-the-plan-act-observe-loop)
+  - [How the Plan-Act-Observe Loop Works](#how-the-plan-act-observe-loop-works)
+  - [Exercise: Observe the Loop on GitHub](#exercise-observe-the-loop-on-github)
+- [🚀 Step 6: Assign Issues, Track Progress, and Review Pull Requests](#step-6-assign-issues-track-progress-and-review-pull-requests)
+  - [6.1 Create and Assign an Issue](#61-create-and-assign-an-issue)
+  - [6.2 Track Progress and Review the Pull Request](#62-track-progress-and-review-the-pull-request)
+  - [6.3 Create a PR Directly from the Agents Tab](#63-create-a-pr-directly-from-the-agents-tab)
+  - [6.4 Use Copilot as a Code Reviewer](#64-use-copilot-as-a-code-reviewer)
+- [🔌 Step 7: Extend the Coding Agent with MCP](#step-7-extend-the-coding-agent-with-mcp)
+  - [7.1 Understand MCP Configuration for the Coding Agent](#71-understand-mcp-configuration-for-the-coding-agent)
+  - [7.2 Exercise: Use MCP Tools with the Coding Agent](#72-exercise-use-mcp-tools-with-the-coding-agent)
+- [✅ Completion Checklist](#completion-checklist)
+- [🚀 What's Next?](#whats-next)
+
+---
+
 ## What You'll Learn
 
 By the end of this demo, you will:
@@ -433,6 +463,40 @@ You've completed Part One of the Coding Agent demo. Continue to Part Two below t
 # Coding Agent Demo - Part Two: Best Practices
 
 The coding agent is powerful, but it works best when you give it the right setup and inputs. In Part Two you will learn how to write well-scoped issues, choose the right tasks, iterate through PR comments, apply custom instructions, extend with MCP, pre-install dependencies, and manage the agent at the organization level.
+
+---
+
+## Table of Contents — Part Two
+
+- [What You'll Learn](#what-youll-learn-1)
+- [📌 Best Practices - Quick Reference](#best-practices---quick-reference)
+- [🎯 Step 1: Writing Well-Scoped Issues](#step-1-writing-well-scoped-issues)
+  - [1.1 Anatomy of a Good Issue](#11-anatomy-of-a-good-issue)
+  - [1.2 Exercise: Compare Weak vs Strong Issues](#12-exercise-compare-weak-vs-strong-issues)
+  - [1.3 Exercise: Write Your Own Well-Scoped Issue](#13-exercise-write-your-own-well-scoped-issue)
+- [📋 Step 2: Choosing the Right Type of Tasks](#step-2-choosing-the-right-type-of-tasks)
+  - [2.1 Good Fit vs Poor Fit](#21-good-fit-vs-poor-fit)
+  - [2.2 Exercise: Classify Tasks](#22-exercise-classify-tasks)
+  - [2.3 Exercise: Assign Your Issue](#23-exercise-assign-your-issue)
+- [💬 Step 3: Iterating with Pull Request Comments](#step-3-iterating-with-pull-request-comments)
+  - [3.1 How PR Comments Work with the Coding Agent](#31-how-pr-comments-work-with-the-coding-agent)
+  - [3.2 Exercise: Review and Comment on Copilot's PR](#32-exercise-review-and-comment-on-copilots-pr)
+- [📐 Step 4: Custom Instructions for the Coding Agent](#step-4-custom-instructions-for-the-coding-agent)
+  - [4.1 How Custom Instructions Apply](#41-how-custom-instructions-apply)
+  - [4.2 Exercise: Review Existing Instructions](#42-exercise-review-existing-instructions)
+  - [4.3 Exercise: Verify the Agent Follows Instructions](#43-exercise-verify-the-agent-follows-instructions)
+- [🔌 Step 5: Extending the Coding Agent with MCP](#step-5-extending-the-coding-agent-with-mcp)
+  - [5.1 Best Practices for MCP with the Coding Agent](#51-best-practices-for-mcp-with-the-coding-agent)
+  - [5.2 Exercise: Review and Validate MCP Configuration](#52-exercise-review-and-validate-mcp-configuration)
+  - [5.3 Exercise: Test MCP-Assisted Issue](#53-exercise-test-mcp-assisted-issue)
+- [⚙️ Step 6: Pre-Install Dependencies in Copilot's Environment](#step-6-pre-install-dependencies-in-copilots-environment)
+  - [6.1 Why Pre-Installing Matters](#61-why-pre-installing-matters)
+  - [6.2 Exercise: Review or Create Setup Steps](#62-exercise-review-or-create-setup-steps)
+- [🔒 Step 7: Managing the Coding Agent at the Organization Level](#step-7-managing-the-coding-agent-at-the-organization-level)
+  - [7.1 Key Management Controls](#71-key-management-controls)
+  - [7.2 Exercise: Review Organization Policies](#72-exercise-review-organization-policies)
+- [✅ Part Two Completion Checklist](#part-two-completion-checklist)
+- [🚀 What's Next?](#whats-next-1)
 
 ---
 

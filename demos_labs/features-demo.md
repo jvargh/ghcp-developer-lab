@@ -4,12 +4,46 @@ Welcome to this repository! You're probably wondering what it is and how it work
 
 Let's start by learning how to choose the right Copilot capability for each stage of development.
 
+## Table of Contents
+
+- [What You'll Learn](#what-youll-learn)
+- [🚀 Getting Started](#getting-started)
+- [🎯 Step 1: Discover Available Features and Modes](#step-1-discover-available-features-and-modes)
+  - [1.2 Developer Tool Integration: Command Palette](#12-developer-tool-integration-command-palette)
+  - [1.3 Keyboard Shortcuts and Productivity Workflows](#13-keyboard-shortcuts-and-productivity-workflows)
+  - [1.4 Session Controls + Model Picker (Latest UX)](#14-session-controls--model-picker-latest-ux)
+- [📚 Step 2: Planning in the IDE with Copilot Chat](#step-2-planning-in-the-ide-with-copilot-chat)
+  - [2.1 Get Project Overview](#21-get-project-overview)
+  - [2.2 Brainstorm and Prioritize Improvements](#22-brainstorm-and-prioritize-improvements)
+  - [2.3 Explain Selected Code](#23-explain-selected-code)
+  - [2.4 Plan and Implement a Footer Update](#24-plan-and-implement-a-footer-update)
+  - [2.5 Context-Aware Coding with Inline Chat](#25-context-aware-coding-with-inline-chat)
+  - [2.6 Command-Based AI Interactions: Slash Commands](#26-command-based-ai-interactions-slash-commands)
+  - [2.7 Code Exploration and Learning](#27-code-exploration-and-learning)
+- [💻 Step 3: Code Creation with Completions + Chat](#step-3-code-creation-with-completions--chat)
+  - [3.1 Inline Suggestions and Code Completions](#31-inline-suggestions-and-code-completions)
+  - [3.2 Predictive Code Completion and Real-Time Assistance](#32-predictive-code-completion-and-real-time-assistance)
+  - [3.3 Boilerplate Code Generation](#33-boilerplate-code-generation)
+  - [3.4 Natural Language to Code: Comments-Driven Development](#34-natural-language-to-code-comments-driven-development)
+  - [3.5 Alternative Code Suggestions: Multiple Implementations](#35-alternative-code-suggestions-multiple-implementations)
+- [🧪 Step 4: Testing and Debugging with Copilot](#step-4-testing-and-debugging-with-copilot)
+  - [4.1 Automated Unit Test Generation](#41-automated-unit-test-generation)
+  - [4.2 Debug a Local Issue](#42-debug-a-local-issue)
+- [📝 Step 5: Review and Commit Your Changes](#step-5-review-and-commit-your-changes)
+  - [Option A: AI-Powered Review (Premium Feature)](#option-a-ai-powered-review-premium-feature)
+  - [Option B: Manual Review (Free Alternative)](#option-b-manual-review-free-alternative)
+  - [Commit Your Changes](#commit-your-changes)
+- [✅ Completion Checklist](#completion-checklist)
+- [🚀 What's Next?](#whats-next)
+
+---
+
 ## What You'll Learn
 
 By the end of this demo, you will:
 
 - Understand how Copilot supports planning, coding, testing, reviews, and operations
-- Know how to use Ask, Plan, and Agent modes in Copilot Chat
+- Know how to use Copilot Chat and Agent mode, and use `/plan` for structured planning
 - Be able to generate and refine code with completions and chat prompts
 - Know how to use Copilot for test/debug and local workflow troubleshooting
 - Use AI-assisted code completion including inline suggestions, predictive completion, and boilerplate generation
@@ -17,6 +51,7 @@ By the end of this demo, you will:
 - Use conversational AI for natural language coding queries and prompt-driven code generation
 - Apply context-aware coding assistance with inline chat for in-editor edits and explanations
 - Run command-based AI interactions with slash commands (`/explain`, `/tests`, `/fix`)
+- Tune reasoning models with Thinking Effort in the model picker
 - Generate code from natural language comments and descriptions
 - Explore and understand existing code with AI-powered explanations and code review assistance
 - Compare alternative code suggestions and select optimal implementations
@@ -38,12 +73,9 @@ Continue with the demo by following the steps below.
 
 ## 🎯 Step 1: Discover Available Features and Modes
 
-Mode: Ask
-
 **Goal:** See available commands and understand where each mode fits.
 
-**Action:** Type the following command in the Copilot chat:  
-Prompt
+**Action:** Type the following command in the Copilot chat:
 
 ```
 /help
@@ -51,13 +83,13 @@ Prompt
 
 **Expected Result:** You'll see a list of available commands and features.
 
-**Follow-up Prompt:**
+**Follow-up Prompt- In VS Code Copilot Chat:**
 
 ```
-In VS Code Copilot Chat, explain when to use Ask mode, Plan mode, and Agent mode for this repository.
+Explain when to use Ask mode, Plan mode, and Agent mode for this repository
 ```
 
-**Expected Result:** A practical mode-selection guide grounded in this project.
+**Expected Result:** A practical guide on when to chat vs. delegate to the agent.
 
 ### 1.2 Developer Tool Integration: Command Palette
 
@@ -67,10 +99,10 @@ In VS Code Copilot Chat, explain when to use Ask mode, Plan mode, and Agent mode
 
 1.  **Open the Command Palette:** Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac)
 2.  **Type:** `Copilot` to see all available Copilot commands
-3.  **Try these commands:**
-    - `GitHub Copilot: Open Chat` - Opens the Copilot Chat panel
-    - `GitHub Copilot: Toggle Copilot` - Enable/disable inline suggestions
-    - `GitHub Copilot: Open Completions Panel` - See all suggestion alternatives
+3.  **Try these commands** (exact names may vary slightly by version):
+    - `GitHub Copilot: Focus on Chat View` - Opens the Copilot Chat panel
+    - `GitHub Copilot: Enable/Disable Completions` - Toggle inline suggestions on/off
+    - `GitHub Copilot: Open Completions Panel` - See multiple suggestion alternatives
 
 **Expected Result:** You'll see the full list of Copilot commands available in your IDE.
 
@@ -92,6 +124,29 @@ In VS Code Copilot Chat, explain when to use Ask mode, Plan mode, and Agent mode
 **Action:** Try each shortcut while editing a file. Navigate to any `.tsx` file and practice triggering and cycling through suggestions.
 
 **💡 Pro Tip:** Combine `Alt+]` / `Alt+[` to quickly cycle through alternative suggestions without leaving your editor flow.
+
+### 1.4 Session Controls + Model Picker (Latest UX)
+
+**Goal:** Practice modern chat controls for steering long-running agent requests.
+
+**Action - Steering and queueing:**
+
+1. Start a longer request in Agent mode.
+2. While it is still running, send another message and choose one of:
+   - **Add to Queue** (run next)
+   - **Steer with Message** (redirect current flow)
+   - **Stop and Send** (cancel current and run new)
+
+**Expected Result:** You can keep momentum during long tasks without waiting for the agent to finish before redirecting it.
+
+**Action - Thinking Effort:**
+
+1. Open the model picker in Copilot Chat (click the model name near the input box).
+2. Select a reasoning model (e.g., `o3` or `o4-mini`).
+3. Adjust the **Thinking** slider — choose **Low**, **Medium**, or **High** based on task complexity.
+4. Send a prompt like: `Analyse the architecture of this project and suggest structural improvements.`
+
+**Expected Result:** Higher thinking effort produces more thorough, step-by-step reasoning — useful for complex planning or architectural questions. Lower effort is faster for simple tasks.
 
 ---
 
@@ -138,33 +193,38 @@ Given this codebase, suggest the top 5 practical improvements for maintainabilit
 
 **Expected Result:** A plain-English walkthrough of the selected code, making it easy to understand logic you didn't write.
 
-### 2.4 Create a Plan Before Editing
+### 2.4 Plan and Implement a Footer Update
 
-**Prompt:**
+**Action:** Open Copilot Chat in Agent mode and run:
 
 ```
-Create a step-by-step plan to add a small footer update in src/app/layout.tsx with minimal risk. Include validation steps.
+/plan Add a small footer to src/app/layout.tsx with logo and copyright info. Include validation steps.
 ```
 
-**💡 Pro Tip:** Use Plan mode for larger or riskier changes before you start editing. If this was implemented in Agent mode, then start the server and validate the completion of the footer. 
+Copilot will propose a step-by-step plan and it should save it a plan.md file. Review it, then let the agent execute it.
+
+**Validate:** Once the footer is added, start the dev server (`npm run dev`) and open [http://localhost:3000](http://localhost:3000) to confirm the footer appears.
+
+**💡 Pro Tip:** Use `/plan` before making larger or riskier edits — it gives you a reviewable checklist before the agent writes any code.
 
 ### 2.5 Context-Aware Coding with Inline Chat
+**Note:** Ensure that `editor.inlinesuggest.enabled` is enabled in your VS Code settings.
 
 **Goal:** Use inline chat (`Ctrl+I` / `Cmd+I`) to make targeted edits and get explanations directly in the editor.
 
 **Action:**
 
 1.  **Open a file:** Navigate to `src/components/ui/cards/FeatureCard.tsx`
-2.  **Select a code block:** Highlight the component's return statement
+2.  **Select a code block:** Highlight the component body (e.g., from the opening `function` line to the closing `}`)
 3.  **Open inline chat:** Press `Ctrl+I` (Windows/Linux) or `Cmd+I` (Mac)
 4.  **Type a request:**
 
 ```
-Add a hover scale animation to this card using Tailwind classes
+Add a subtle drop shadow that deepens on hover using Tailwind classes
 ```
 
-1.  **Review the diff:** Copilot shows inline changes. Accept with **Accept** or discard with **Discard**. 
-2.  If acccepted then validate by going to the home page which shows 3 feature cards ("Smart Upload", "Client Proofing", "Public Sharing"). Hover over each card and you should see it **smoothly scale up to 105%** over 300ms
+1.  **Review the diff:** Copilot shows inline changes. Accept with **Accept** or discard with **Discard**.
+2.  If accepted, validate by going to the home page which shows 3 feature cards (“Smart Upload”, “Client Proofing”, “Public Sharing”). Hover over each card and you should see the **shadow deepen smoothly**.
 
 **Follow-up:** Use inline chat (`Ctrl+I` / `Cmd+I`) and select a different section of code and enter:
 
@@ -182,14 +242,7 @@ Explain what this code does line by line
 
 **Action:** Open Copilot Chat and try each of these slash commands:
 
-`/explain` **\- Explain selected code:**
-
-1.  Highlight the `GalleryGrid` component in `src/components/gallery/GalleryGrid.tsx`
-2.  In Copilot Chat, type:
-
-```
-/explain
-```
+> **Note:** `/explain` was covered in section 2.3. Below are two more essential slash commands.
 
 `/tests` **\- Generate test cases:**
 
@@ -224,7 +277,7 @@ Explain what this code does line by line
 3.  Ask in Copilot Chat:
 
 ```
-/explain Walk me through how this upload component works. Explain the state management, event handlers, and how the drag-and-drop flow is implemented.
+Walk me through how this upload component works. Explain the state management, event handlers, and how the drag-and-drop flow is implemented.
 ```
 
 **Expected Result:** A detailed walkthrough of the component's logic, helping you understand unfamiliar code quickly.
@@ -239,21 +292,13 @@ Review this code for potential issues: performance concerns, accessibility gaps,
 
 **Expected Result:** A code review with actionable suggestions, similar to a peer review.
 
-**Action 3 - Explore patterns across the codebase:**
-
-```
-How is state management handled across the components in this project? Are there any inconsistencies in the patterns used?
-```
-
-**Expected Result:** An overview of patterns used across the project, helping you learn the codebase conventions.
-
 ## 💻 Step 3: Code Creation with Completions + Chat
 
 ### 3.1 Inline Suggestions and Code Completions
 
 1.  **Navigate to file:** Open [`src/app/layout.tsx`](src/app/layout.tsx)
-2.  **Find location:** Go to line 52 `{/* REPLACE THIS COMMENT */}`
-3.  **Remove line 52 comment:** and replace it with the following comment:
+2.  **Find location:** Go to line 55 `{/* REPLACE THIS COMMENT */}`
+3.  **Remove the comment on line 55** and replace it with the following comment:
 
 ```
 {
@@ -264,6 +309,12 @@ How is state management handled across the components in this project? Are there
 1.  **Wait for suggestion:** Copilot will suggest code automatically
 2.  **Accept suggestion:** Press `Tab` to accept or `Esc` to dismiss
 3.  **Check your changes:** Save the file and refresh [http://localhost:3000](http://localhost:3000) to see your new footer
+
+**(Optional) Follow-up:** Once the footer is generated, ask Copilot to refine it:
+
+```
+Refactor this footer to match the existing styling patterns in this repository and keep dark mode support.
+```
 
 ### 3.2 Predictive Code Completion and Real-Time Assistance
 
@@ -288,7 +339,7 @@ How is state management handled across the components in this project? Are there
 
 **Action 1 - Generate a new component:**
 
-1.  **Create a new file:** `src/components/ui/cards/InfoCard.tsx`
+1.  **Open the file:** `src/components/ui/cards/InfoCard.tsx` (already exists as a blank file and ready to use)
 2.  **Type the following comment at the top of the empty file:**
 
 ```
@@ -300,7 +351,7 @@ How is state management handled across the components in this project? Are there
 1.  **Press Enter** and wait for Copilot to suggest the full component boilerplate
 2.  **Accept** with `Tab`
 3.  If the implementation does not seem complete, then run 'Fix this file based on comments and any ensuing errors' from Copilot chat.
-4.  To visualize this component in the web page, run 'How is the output realized in the web page from changes made to this file' and follow directions.
+4.  To visualize this component in the web page, prompt Copilot to wire it into `src/app/page.tsx` (or another page), then validate in the browser.
 
 **Action 2 - Generate a TypeScript interface:**
 
@@ -340,11 +391,14 @@ In the same file or a new one, type:
 
 **Outcome:**
 
-1.   Select the generated code from above and in chat run 'create an implementation that visualizes these on the web portal'.
-2.  This should result in a page.tsx and layout.tsx and go to [**http://localhost:3000/explore.**](vscode-file://vscode-app/c:/Users/varghesejoji/AppData/Local/Programs/Microsoft%20VS%20Code/0870c2a0c7/resources/app/out/vs/code/electron-browser/workbench/workbench.html)
+1.   Select the generated code from above and in chat run
+``` 
+create an implementation that visualizes these on the web portal
+```
+2.  This should result in updates to `src/app/explore/page.tsx` (and related files if needed). Then open [http://localhost:3000/explore](http://localhost:3000/explore).
 3.  On that page:
-    - **Filter by Tag** section:  clicking any tag pill calls [getPhotosByTag(tag, 5)](vscode-file://vscode-app/c:/Users/varghesejoji/AppData/Local/Programs/Microsoft%20VS%20Code/0870c2a0c7/resources/app/out/vs/code/electron-browser/workbench/workbench.html) and displays the top 5 most recent photos matching that tag
-    - **All Categories** section: uses [groupPhotosByCategory()](vscode-file://vscode-app/c:/Users/varghesejoji/AppData/Local/Programs/Microsoft%20VS%20Code/0870c2a0c7/resources/app/out/vs/code/electron-browser/workbench/workbench.html) to show every category with its photos
+  - **Filter by Tag** section: clicking any tag pill calls `getPhotosByTag(tag, 5)` and displays the top 5 most recent photos matching that tag
+  - **All Categories** section: uses `groupPhotosByCategory()` to show every category with its photos
 
 ### 3.5 Alternative Code Suggestions: Multiple Implementations
 
@@ -378,29 +432,19 @@ In the same file or a new one, type:
 
 **Expected Result:** You'll see that Copilot can offer different algorithms, patterns, and styles for the same task - empowering you to choose the best fit.
 
-### 3.6 Refine with Chat
-
-After accepting a completion, ask Copilot:
-
-```
-Refactor this footer to match the existing styling patterns in this repository and keep dark mode support.
-```
-
-**Expected Result:** Cleaner code aligned to project conventions.
-
 ## 🧪 Step 4: Testing and Debugging with Copilot
 
-### 4.1 Generate Test Ideas
+### 4.1 Automated Unit Test Generation
 
-**Prompt:**
+**Goal:** Use Copilot to generate complete, runnable unit tests.
+
+**Before starting**, ask Copilot in chat:
 
 ```
 Suggest test cases for the footer change in src/app/layout.tsx, including accessibility and responsive behavior checks.
 ```
 
-### 4.2 Automated Unit Test Generation
-
-**Goal:** Use Copilot to generate complete, runnable unit tests.
+This gives you a mental model of what good tests look like before generating them.
 
 **Action 1 - Generate tests with slash command:**
 
@@ -416,7 +460,7 @@ Suggest test cases for the footer change in src/app/layout.tsx, including access
 
 **Action 2 - Generate tests with a detailed prompt:**
 
-In Copilot Chat, try:
+In Copilot Chat, run the following prompt:
 
 ```
 Generate a comprehensive unit test file for src/components/gallery/GalleryGrid.tsx using Jest and React Testing Library. Include tests for:
@@ -431,11 +475,11 @@ Generate a comprehensive unit test file for src/components/gallery/GalleryGrid.t
 
 **Action 3 - AI-assisted test writing with inline chat:**
 
-1.  **Create a new test file:** `src/components/ui/cards/FeatureCard.test.tsx`
+1.  **Create a new test file:** `src/components/ui/layout/Hero.test.tsx`
 2.  **Type a comment:**
 
 ```
-// Tests for FeatureCard component
+// Tests for the Hero component
 ```
 
 1.  **Press Enter** and let Copilot suggest the test boilerplate
@@ -447,7 +491,7 @@ Add edge case tests for missing props and very long text content
 
 #### **💡 Pro Tip:** Start with `/tests` for quick generation, then use inline chat to refine and add edge cases incrementally.
 
-### 4.3 Debug a Local Issue
+### 4.2 Debug a Local Issue
 
 If you see an error, paste it into chat and ask:
 
@@ -455,7 +499,7 @@ If you see an error, paste it into chat and ask:
 Help me debug this error from the local terminal/dev server. Explain root cause and give the smallest safe fix.
 ```
 
-### 4.4 Optional Prompt for Validation
+**Follow-up:** Once fixed, ask for a quick browser validation checklist:
 
 ```
 Give me a quick manual validation checklist I can run in the browser for this footer update.
@@ -471,6 +515,8 @@ If you have premium access:
 2.  **Open Copilot menu:** Right-click → Select "Copilot"
 3.  **Get review:** Choose "Review and Comment"
 4.  **Process feedback:** Review suggestions and accept/discard as needed
+
+**Optional quality-of-life tip (latest UX):** In the chat response context menu, use **Copy Final Response** when you want only the final markdown answer (without tool-call details).
 
 ### Option B: Manual Review (Free Alternative)
 
@@ -489,24 +535,6 @@ If you don't have premium access:
 
 **🎉 Success indicator:** You should see your changes in the git history!
 
-## 🚀 Step 6: Deployment and Operations (IDE Guidance)
-
-Use Copilot Chat to assist with local deployment-readiness and troubleshooting tasks:
-
-**Prompt: CI/CD guidance**
-
-```
-Based on this Next.js repository, suggest a minimal CI workflow checklist (lint, build, tests) and common failure points to watch.
-```
-
-**Prompt: troubleshooting guidance**
-
-```
-If deployment fails with a build error, what local checks should I run first in this project?
-```
-
-**Expected Result:** A practical runbook you can use before handing work off.
-
 ## ✅ Completion Checklist
 
 Mark off each item as you complete it:
@@ -519,8 +547,9 @@ Mark off each item as you complete it:
 **Conversational AI & Modes**
 
 - Used `/help` command successfully
-- Compared Ask, Plan, and Agent modes for this repo
+- Understood when to use Copilot Chat vs Agent mode, and `/plan` for structured work
 - Got project summary using Copilot Chat
+- Practiced steering/queueing during a long-running agent request
 
 **Context-Aware Coding & Slash Commands**
 
@@ -553,10 +582,9 @@ Mark off each item as you complete it:
 - Generated unit tests with `/tests` command
 - Created a test file with AI-assisted test writing
 
-**Review & Deployment**
+**Review & Commit**
 
 - Reviewed the generated code
-- Used Copilot for CI/CD or deployment-readiness guidance
 - Committed changes to git
 
 ## 🚀 What's Next?

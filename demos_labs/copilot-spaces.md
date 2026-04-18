@@ -2,17 +2,38 @@
 
 Welcome to the GitHub Copilot Spaces demo! In this exercise, you'll learn how to create and utilize GitHub Copilot Spaces to collaborate on development tasks within the Photo Gallery & Portfolio application.
 
+## Table of Contents
+
+- [What You'll Learn](#what-youll-learn)
+- [🚀 Step 1: Commit and Push Your Code to GitHub](#step-1-commit-and-push-your-code-to-github)
+- [🎯 Step 2: Create Your First Copilot Space](#step-2-create-your-first-copilot-space)
+  - [Setup](#setup)
+  - [Group A Option: Security Analysis & Hardening](#group-a-option-security-analysis--hardening)
+  - [Group B Option: Documentation Generation & API Design](#group-b-option-documentation-generation--api-design)
+  - [Share your Space (Optional)](#share-your-space-optional)
+- [🤝 Step 3: Collaborate and Share](#step-3-collaborate-and-share)
+  - [Group A Option](#group-a-option-1)
+  - [Group B Option](#group-b-option-1)
+  - [Final Discussion](#final-discussion)
+- [💡 Advanced: Space Evolution Over Time](#advanced-space-evolution-over-time)
+- [✅ Completion Checklist](#completion-checklist)
+- [🚀 What's Next?](#whats-next)
+
+---
+
 ## What You'll Learn
 
 By the end of this demo, you will:
 
 - Understand what GitHub Copilot Spaces are and their benefits
-- Know how to create a new Copilot Space
-- Be able to set up a Space with specific goals and context
+- Know how to create a new Copilot Space with modern context management
+- Be able to set up a Space with specific goals, context, and MCP integrations
 - Complete development tasks using collaborative AI assistance
-- Share and manage Spaces with team members
+- Share and manage Spaces with team members and monitor execution with Agent Debug Panel
+- Combine Copilot Spaces with Agents app for parallel team workflows (NEW - April 2026)
+- Use terminal tools and MCP within Spaces for automated actions
 
-**Estimated Time:** 20-25 minutes
+**Estimated Time:** 25-30 minutes
 
 ## 🚀 Step 1: Commit and Push Your Code to GitHub
 
@@ -63,6 +84,26 @@ Copilot will stage, commit, and push your changes using the available terminal a
 
 1.  Go to `https://github.com/copilot/spaces`
 2.  Select `Create Space`
+
+### 💡 Pro Tip: Using Copilot Spaces with Agents App (v1.115+ Feature - Optional Workflow)
+
+**For advanced team workflows**, you can combine Copilot Spaces with the Agents app:
+
+1. **Create a Copilot Space** to define shared context, instructions, and goals for your team
+2. **Share the Space link** with team members
+3. **Each team member can open the Agents app** and run the task in an **isolated worktree**
+4. **Parallel execution**: Multiple team members run the same Space task simultaneously without stepping on each other's code
+5. **Review and merge**: Each person reviews their agent's changes, creates a PR, and merges individually
+
+**Example workflow:**
+- Space: "Implement Password Reset Feature"  
+- Team: 5 developers  
+- Execution: Each developer runs the agent in the Agents app with the Space as context → 5 isolated worktrees  
+- Outcome: 5 pull requests with the same security and style standards from the Space instructions
+
+This approach combines the **shared context benefits of Spaces** with the **parallel execution power of Agents app**.
+
+---
 
 ### Group A Option: Security Analysis & Hardening
 
@@ -211,6 +252,8 @@ package.json
 - **Static Sites**: Docusaurus, GitBook, MkDocs
 ```
 
+**Expected Outcome:** Your Space now has documentation instructions, source files, standards, AND optional live GitHub MCP tools to analyze existing docs and suggest improvements.
+
 **Outcome:** You now have a fully configured Copilot Space with documentation-focused instructions, relevant project source files, and documentation standards loaded as context. This Space is ready to use in Step 3, where you'll ask it to generate API specs, component docs, and architecture decision records for the photo gallery application.
 
 ### Share your Space \[OPTIONAL\]
@@ -267,41 +310,100 @@ Following industry best practices, what documentation structure would you recomm
 
 1.  Ask another question! What else do you want to learn?
 
-### Final discussion
+### Monitoring Space Execution with Agent Debug Panel (v1.115+ Feature)
+
+**If you're using the Agents app to run your Space task in parallel:**
+
+1. While your agent is running, open **Agent Debug Panel** (`Ctrl+Shift+P` → "Debug: Show Panel")
+2. Monitor the agent's execution in real-time:
+   - **Context Gathering** - See which Space files and sources were loaded
+   - **Tool Calls** - Watch browser/terminal tools execute (e.g., npm install, security scans)
+   - **MCP Requests** - If enabled, see live GitHub MCP tool calls
+   - **Reasoning Steps** - Understand how the agent interpreted your Space instructions
+3. After completion, review the changes. Note where the agent followed versus deviated from Space instructions
+4. If needed, refine the Space instructions and re-run in a new agent session
+
+**Why this matters:** You get full visibility into how well your Space context is guiding the agent's work across your team.
+
+---
+
+### Final Discussion
 
 **How were you able to collaborate with your team using Copilot Spaces?**
 
 - Shared a single Space with the team so everyone had the same context, instructions, and source files — no need to repeat setup or re-explain the codebase.
 - Could hand off the Space link and a teammate could immediately continue the conversation with full context.
 - The Space acted as a shared knowledge base, keeping security findings or documentation decisions in one place.
+- **(NEW)** With the Agents app, multiple team members can run the same Space task in parallel, each in an isolated worktree, without context pollution or merge conflicts during execution.
 
 **How did Copilot's suggestions help (or hinder) your collaboration?**
 
 - ✅ Copilot gave consistent, context-aware answers because the instructions and source files were pre-loaded — everyone got responses aligned with the same security/documentation standards.
 - ✅ It accelerated repetitive tasks like generating boilerplate docs, listing OWASP risks, or drafting CSP headers.
+- ✅ **(NEW in v1.115+)** With Agent Debug Panel, you can inspect exactly which Space sources and instructions the agent used, making it easier to refine Spaces for better results.
 - ❌ Copilot may have generated overly generic recommendations when the source files didn't provide enough detail about the actual implementation (e.g., no real API routes exist yet).
+- ❌ **(NEW)** If multiple agents ran the same task simultaneously, coordination needed to avoid duplicate work (e.g., both agents writing the same security header logic).
 
 **What would you do differently next time to improve teamwork and productivity?**
 
 - Add more source files upfront (e.g., all component files, config files) so Copilot has a fuller picture of the codebase.
 - Write more specific instructions to narrow Copilot's focus to the exact task at hand instead of broad topics.
 - Split large tasks into separate Spaces (e.g., one for upload security, one for auth) rather than covering everything in a single Space.
+- **(NEW)** If running the same Space task with multiple agents:
+  - Assign different aspects to different agents (e.g., "Agent 1: analyze upload security, Agent 2: analyze authentication")
+  - Use the Agent Debug Panel to monitor parallel execution and coordinate hand-offs
+  - Define clear ownership in Space instructions to avoid duplicate work
+- **(OPTIONAL)** Add MCP tools to your Space so agents can query live GitHub data (issues, PRs, dependencies) for more accurate recommendations
 
 Share your thoughts and any tips you discovered for making the most of Copilot Spaces in a team setting.
 
-- **✅** You will have successfully used AI assistance with industry-standard external sources to either conduct a security analysis or create comprehensive documentation for the Photo Gallery & Portfolio application.
+---
+
+## 💡 Advanced: Space Evolution Over Time
+
+**What if your Space grows beyond a single session?**
+
+Later in your project, you can:
+1. **Update Space instructions** as you learn what works → agents get smarter
+2. **Archive old Spaces** that are no longer relevant → keep your Space list focused
+3. **Clone a Space** to experiment with new instructions without disrupting the original
+4. **Link multiple Spaces** (security → documentation → deployment) to create a workflow pipeline
+
+Example pipeline:
+```
+Security Assessment Space
+↓ (findings feed into)
+Architecture Space  
+↓ (designs feed into)
+Documentation Space
+↓ (outputs feed into)
+Deployment Space
+```
+
+---
 
 ## ✅ Completion Checklist
 
 Mark off each item as you complete it:
 
+### Core Space Creation
 - Committed and pushed local changes to GitHub
 - Created a new GitHub Copilot Space with a clear security or documentation focus
 - Set detailed instructions incorporating industry standards
 - Added relevant project files to the Space context
 - Used the Space to analyze existing code structure
+
+### Advanced Features (April 2026)
+- Added MCP tools to your Space for live GitHub data access (optional)
+- Understood how to combine Spaces with Agents app for parallel team workflows
+- Used Agent Debug Panel to monitor agent execution against Space instructions
+- Observed how Space sources and instructions guided agent reasoning
+
+### Collaboration & Iteration
 - Documented progress and decisions within the Space
 - Shared or saved the Space for future collaboration
+- Discussed team workflow improvements based on Space execution
+- Planned how to evolve your Space over time as the project grows
 
 ## 🚀 What's Next?
 
