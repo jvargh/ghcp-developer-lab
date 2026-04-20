@@ -17,11 +17,11 @@ Welcome to the GitHub Copilot engineering practices demo! In this session, we go
   - [Step 7: Inspect Copilot's Decision Process with Debug View](#step-7-inspect-copilots-decision-process-with-debug-view)
   - [Step 8: Share Chat Conversations with Your Team](#step-8-share-chat-conversations-with-your-team)
 - [Part 4: Prompt Engineering Techniques](#part-4-prompt-engineering-techniques)
-  - [Step 10: Prompt Engineering Techniques Overview](#step-10-prompt-engineering-techniques-overview)
-  - [Step 11: Few-Shot Prompting (Learning by Example)](#step-11-few-shot-prompting-learning-by-example)
-  - [Step 12: Chain of Thought (Step-by-Step Reasoning)](#step-12-chain-of-thought-step-by-step-reasoning)
-  - [Step 13: Retrieval Augmented Generation (RAG)](#step-13-retrieval-augmented-generation-rag)
-  - [Step 14: Step-Back Prompting (Zoom Out, Then Dive In)](#step-14-step-back-prompting-zoom-out-then-dive-in)
+  - [Step 9: Prompt Engineering Techniques Overview](#step-9-prompt-engineering-techniques-overview)
+  - [Step 10: Few-Shot Prompting (Learning by Example)](#step-10-few-shot-prompting-learning-by-example)
+  - [Step 11: Chain of Thought (Step-by-Step Reasoning)](#step-11-chain-of-thought-step-by-step-reasoning)
+  - [Step 12: Retrieval Augmented Generation (RAG)](#step-12-retrieval-augmented-generation-rag)
+  - [Step 13: Step-Back Prompting (Zoom Out, Then Dive In)](#step-13-step-back-prompting-zoom-out-then-dive-in)
   - [Prompt Engineering Techniques Summary](#prompt-engineering-techniques-summary)
 - [✅ Completion Checklist](#completion-checklist)
 - [🎓 Key Takeaways](#key-takeaways)
@@ -208,27 +208,6 @@ In src/components/gallery/GalleryGrid.tsx, how can we optimize the filtering per
 
 **Outcome:** The _repository-scoped_ prompt should return a high-level overview of patterns across the entire codebase (e.g., App Router, component-driven architecture, mock data pattern). The _file-scoped_ prompt should return concrete, line-level optimization suggestions specific to `GalleryGrid.tsx`. Comparing the two responses demonstrates how narrowing or broadening scope directly controls the specificity and relevance of Copilot's answers.
 
-#### **Practice 3: Use Custom Instructions**
-
-Custom instructions enforce standards and preferences automatically.
-
-**Location in VS Code:**
-
-- Open Settings (Ctrl+, or Cmd+,)
-- Search for "Copilot: Instructions"
-- Add repository-specific or personal guidelines
-
-**Example Instructions:**
-
-```
-- Always use TypeScript with explicit types
-- Prefer functional components with hooks
-- Follow the Tailwind CSS patterns in this repo
-- Include error handling in all async functions
-```
-
-**Outcome:** After adding custom instructions, any code Copilot generates should automatically follow the specified conventions (e.g., explicit TypeScript types, functional components with hooks, Tailwind CSS patterns, error handling in async functions) without you having to repeat those requirements in every prompt. This demonstrates how custom instructions act as persistent, always-on context that shapes every Copilot response.
-
 ---
 
 ### 🚫 Step 5: Content Exclusions with .copilotignore
@@ -298,16 +277,16 @@ coverage/
 
 **Validation 2: Excluded files don't appear as automatic context in Chat**
 
-1. Open the Copilot Chat Debug view: press `Ctrl+Shift+P` → type **"Copilot Chat Debug"** → select **"Focus on Copilot Chat Debug View"**.
-2. Position the Debug panel alongside the Chat panel so you can see both.
-3. In Copilot Chat, run this prompt:
+1.  Open the Copilot Chat Debug view: press `Ctrl+Shift+P` → type **"Copilot Chat Debug"** → select **"Focus on Copilot Chat Debug View"**.
+2.  Position the Debug panel alongside the Chat panel so you can see both.
+3.  In Copilot Chat, run this prompt:
 
 ```
 What dependencies does this project use and what are their versions?
 ```
 
-4. After the response appears, switch to the Debug panel and expand the latest request.
-5. Look at the **Context** section — it lists every file Copilot included.
+1.  After the response appears, switch to the Debug panel and expand the latest request.
+2.  Look at the **Context** section — it lists every file Copilot included.
 
 **Expected:** You should see `package.json` (or `package-lock.json`) listed as context, but **no files from** `**node_modules/**`. Copilot answers from the project manifest, not from the actual installed packages.
 
@@ -316,11 +295,13 @@ What dependencies does this project use and what are their versions?
 1.  Open `src/app/page.tsx` in the editor.
 2.  Go to the bottom of the file, after the last line of code.
 3.  On a new line, type the following comment and pause for 1–2 seconds:
-    ```
-    // create a function that reads the Next.js config
-    ```
-4.  **Expected:** Copilot suggests code that imports from project files (e.g., `next.config.ts`) — not code that references internal files from `node_modules/next/`, `.next/`, or `coverage/`.
-5.  Dismiss the suggestion and undo any changes (`Ctrl+Z`).
+
+```
+// create a function that reads the Next.js config
+```
+
+1.  **Expected:** Copilot suggests code that imports from project files (e.g., `next.config.ts`) — not code that references internal files from `node_modules/next/`, `.next/`, or `coverage/`.
+2.  Dismiss the suggestion and undo any changes (`Ctrl+Z`).
 
 **⚠️ Important Clarification:** If you directly ask Copilot to read an excluded file (e.g., "list files in node_modules"), it can still do so via tool calls. `.copilotignore` is a **context filter**, not a security boundary. For true access control, use repository permissions and environment-level secrets management.
 
@@ -498,7 +479,7 @@ The **Agent Debug Log panel** shows a chronological event log of everything that
 
 Now that you understand context engineering, let's level up with advanced prompting techniques. When combined with strong context, these dramatically improve response quality.
 
-### 📚 Step 10: Prompt Engineering Techniques Overview
+### 📚 Step 9: Prompt Engineering Techniques Overview
 
 There are four core techniques that will transform how you interact with Copilot:
 
@@ -511,7 +492,7 @@ Let's practice each one.
 
 ---
 
-### 🎯 Step 11: Few-Shot Prompting (Learning by Example)
+### 🎯 Step 10: Few-Shot Prompting (Learning by Example)
 
 **Technique:** Give 2-3 examples of input → output to establish the pattern you want.
 
@@ -545,7 +526,7 @@ Now create the formatPhotoMetadata() function that follows this pattern.
 
 ---
 
-### 🔗 Step 12: Chain of Thought (Step-by-Step Reasoning)
+### 🔗 Step 11: Chain of Thought (Step-by-Step Reasoning)
 
 **Technique:** Ask Copilot to work through problems step by step for more reliable, logical answers.
 
@@ -595,7 +576,7 @@ We need to add a "favorites" feature. Walk me through step by step:
 
 ---
 
-### 📖 Step 13: Retrieval Augmented Generation (RAG)
+### 📖 Step 12: Retrieval Augmented Generation (RAG)
 
 **Technique:** Ground the model in real, relevant information from external sources before it answers.
 
@@ -631,7 +612,7 @@ Pull implementation details directly from those files.
 
 ---
 
-### 🎪 Step 14: Step-Back Prompting (Zoom Out, Then Dive In)
+### 🎪 Step 13: Step-Back Prompting (Zoom Out, Then Dive In)
 
 **Technique:** Ask a higher-level question about principles or context _before_ solving the specific problem.
 
