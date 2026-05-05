@@ -1,55 +1,70 @@
 flowchart TD
     A([Start: Select the right GitHub Copilot offering])
 
-    A --> B{What stage is the customer in?}
+    A -->|Start by understanding where the customer is today| B{What stage is the customer in?}
 
-    B --> C[Innovation and Exploration]
-    B --> D[Skilling and Adoption]
-    B --> E[Scale, Governance and Optimization]
+    B -->|Still exploring or just getting started| C[Innovation and Exploration]
+    B -->|Already using Copilot and building capability| D[Skilling and Adoption]
+    B -->|Scaling usage or optimizing impact| E[Scale, Governance and Optimization]
 
-    C --> C1{Have teams used Copilot before?}
+    C -->|Let’s understand current exposure| C1{Have teams used Copilot before?}
 
-    C1 -->|No or very limited exposure| C2[Zero to Agents Immersion]
-    C1 -->|Some awareness but limited hands-on use| C3[GitHub Copilot Hackathon]
+    C1 -->|No or very limited exposure across teams| C2[Zero to Agents Immersion]
+    C2 -->|Help teams get familiar and build confidence| C2A[Build baseline awareness and confidence]
 
-    D --> D1{What is the main adoption need?}
+    C1 -->|Some awareness but limited hands-on usage| C3[GitHub Copilot Hackathon]
+    C3 -->|Create shared team experience and momentum| C3A[Create hands-on team experience and momentum]
 
-    D1 -->|Developers need stronger daily skills| D2[GitHub Copilot for Developers Intermediate]
-    D1 -->|Advanced DevOps workflows| D3[Agentic DevOps and GitHub Copilot Deep-Dive]
-    D1 -->|Scale across org| D4[GitHub Copilot Adoption and Value Realization]
+    D -->|What is the main gap today?| D1{What is the main adoption need?}
 
-    E --> E1{What support is needed to scale?}
+    D1 -->|Developers are using Copilot but not consistently| D2[GitHub Copilot for Developers Intermediate]
+    D2 -->|Standardize usage and improve effectiveness| D2A[Improve prompt engineering secure coding and best practices]
 
-    E1 -->|Leadership alignment| E2[GitHub Copilot for Business Fundamentals]
-    E1 -->|Governance and security| E3[GitHub Copilot Business Administration and Security Workshop]
-    E1 -->|Latest capabilities| E4[Technical Update Briefing for GitHub Copilot]
-    E1 -->|Measure and optimize| E5[Solution Optimization for GitHub Copilot]
+    D1 -->|Teams want to expand beyond coding into workflows| D3[Agentic DevOps and GitHub Copilot Deep-Dive]
+    D3 -->|Apply Copilot across CI/CD and DevOps processes| D3A[Apply Copilot to CI/CD code review incident response and workflow automation]
 
-    %% Flow connections
-    C2 --> C3
-    C2 --> D2
+    D1 -->|We want broader rollout across multiple teams| D4[GitHub Copilot Adoption and Value Realization]
+    D4 -->|Drive structured adoption and measurable outcomes| D4A[Scale usage with structured adoption metrics and champions]
 
-    C3 --> D2
+    E -->|What is needed to move forward at scale?| E1{What support is needed to scale?}
 
-    D2 --> D3
-    D3 --> D4
-    D4 --> E5
+    E1 -->|Do leaders need clarity on value and direction?| E2[GitHub Copilot for Business Fundamentals]
+    E2 -->|Align leadership on value and adoption strategy| E2A[Align on business value readiness and adoption strategy]
 
-    E2 --> E3
-    E3 --> D2
-    E4 --> E5
-    E5 --> D4
+    E1 -->|Are there concerns around governance or security?| E3[GitHub Copilot Business Administration and Security Workshop]
+    E3 -->|Set up policies controls and admin practices| E3A[Address policy telemetry license management audit logs and governance]
 
-    %% Styling - Innovation & Exploration (Blue)
+    E1 -->|Do teams need to understand latest capabilities?| E4[Technical Update Briefing for GitHub Copilot]
+    E4 -->|Bring teams up to speed on new features| E4A[Review new features integrations best practices and security considerations]
+
+    E1 -->|Do we need to measure impact and improve usage?| E5[Solution Optimization for GitHub Copilot]
+    E5 -->|Define metrics and optimize adoption| E5A[Define productivity metrics measurement framework and optimization plan]
+
+    %% Cross-flow transitions with guidance
+
+    C2 -->|Once teams are comfortable, move to hands-on team scenarios| C3
+    C2 -->|If teams are ready to go deeper, start building developer skills| D2
+
+    C3 -->|After initial hands-on experience, formalize best practices| D2
+
+    D2 -->|When teams are consistent, expand into broader workflows| D3
+    D3 -->|Once advanced usage is in place, scale across teams| D4
+    D4 -->|After scaling, measure and refine impact| E5
+
+    E2 -->|After leadership alignment, address governance needs| E3
+    E3 -->|Once governance is in place, enable teams further| D2
+    E4 -->|After understanding new features, optimize usage| E5
+    E5 -->|Use insights to improve and expand adoption| D4
+
+    %% Styling
+
     style C2 fill:#E3F2FD,stroke:#1E88E5,stroke-width:2px
     style C3 fill:#E3F2FD,stroke:#1E88E5,stroke-width:2px
 
-    %% Styling - Skilling & Adoption (Green)
     style D2 fill:#E8F5E9,stroke:#43A047,stroke-width:2px
     style D3 fill:#E8F5E9,stroke:#43A047,stroke-width:2px
     style D4 fill:#E8F5E9,stroke:#43A047,stroke-width:2px
 
-    %% Styling - Scale / Governance / Optimization (Purple)
     style E2 fill:#F3E5F5,stroke:#8E24AA,stroke-width:2px
     style E3 fill:#F3E5F5,stroke:#8E24AA,stroke-width:2px
     style E4 fill:#F3E5F5,stroke:#8E24AA,stroke-width:2px
