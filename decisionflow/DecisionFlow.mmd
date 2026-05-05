@@ -1,0 +1,56 @@
+flowchart TD
+    A([Start: Select the right GitHub Copilot offering])
+
+    A --> B{What stage is the customer in?}
+
+    B --> C[Innovation and Exploration]
+    B --> D[Skilling and Adoption]
+    B --> E[Scale, Governance and Optimization]
+
+    C --> C1{Have teams used Copilot before?}
+
+    C1 -->|No or very limited exposure| C2[Zero to Agents Immersion]
+    C1 -->|Some awareness but limited hands-on use| C3[GitHub Copilot Hackathon]
+
+    D --> D1{What is the main adoption need?}
+
+    D1 -->|Developers need stronger daily skills| D2[GitHub Copilot for Developers Intermediate]
+    D1 -->|Advanced DevOps workflows| D3[Agentic DevOps and GitHub Copilot Deep-Dive]
+    D1 -->|Scale across org| D4[GitHub Copilot Adoption and Value Realization]
+
+    E --> E1{What support is needed to scale?}
+
+    E1 -->|Leadership alignment| E2[GitHub Copilot for Business Fundamentals]
+    E1 -->|Governance and security| E3[GitHub Copilot Business Administration and Security Workshop]
+    E1 -->|Latest capabilities| E4[Technical Update Briefing for GitHub Copilot]
+    E1 -->|Measure and optimize| E5[Solution Optimization for GitHub Copilot]
+
+    %% Flow connections
+    C2 --> C3
+    C2 --> D2
+
+    C3 --> D2
+
+    D2 --> D3
+    D3 --> D4
+    D4 --> E5
+
+    E2 --> E3
+    E3 --> D2
+    E4 --> E5
+    E5 --> D4
+
+    %% Styling - Innovation & Exploration (Blue)
+    style C2 fill:#E3F2FD,stroke:#1E88E5,stroke-width:2px
+    style C3 fill:#E3F2FD,stroke:#1E88E5,stroke-width:2px
+
+    %% Styling - Skilling & Adoption (Green)
+    style D2 fill:#E8F5E9,stroke:#43A047,stroke-width:2px
+    style D3 fill:#E8F5E9,stroke:#43A047,stroke-width:2px
+    style D4 fill:#E8F5E9,stroke:#43A047,stroke-width:2px
+
+    %% Styling - Scale / Governance / Optimization (Purple)
+    style E2 fill:#F3E5F5,stroke:#8E24AA,stroke-width:2px
+    style E3 fill:#F3E5F5,stroke:#8E24AA,stroke-width:2px
+    style E4 fill:#F3E5F5,stroke:#8E24AA,stroke-width:2px
+    style E5 fill:#F3E5F5,stroke:#8E24AA,stroke-width:2px
