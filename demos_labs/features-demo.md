@@ -409,7 +409,12 @@ In the same file or a new one, type:
 
 **Outcome:**
 
-1.   Select the generated code from above and in chat run
+1.   Select the generated code from above and in chat run:
+
+```
+Wire these two functions into the explore page at src/app/explore/page.tsx. Add a "Filter by Tag" section that lets users click a tag pill to call getPhotosByTag(tag, 5) and display results, and an "All Categories" section that uses groupPhotosByCategory() to show every category with its photos.
+```
+
 2.  This should result in updates to `src/app/explore/page.tsx` (and related files if needed). Then open [http://localhost:3000/explore](http://localhost:3000/explore).
 3.  On that page:
 
