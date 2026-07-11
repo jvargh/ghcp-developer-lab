@@ -500,10 +500,12 @@ Let's practice each one.
 
 #### Try It: Generate Data Transform Function
 
+**Action:** Open `src/lib/photo-helpers.ts` and paste the following prompt in Copilot Chat:
+
 **Prompt:**
 
 ```
-Create a function to format photo metadata for display. Follow these examples:
+Create a function in src/lib/photo-helpers.ts to format photo metadata for display. Follow these examples:
 
 Example 1:
 Input: { date: "2024-03-15", size: 2048576, tags: ["landscape", "sunset"] }
