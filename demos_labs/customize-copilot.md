@@ -193,7 +193,7 @@ applyTo: "src/lib/mock-*.ts"
 - Ask Copilot to generate new mock data using below prompt. Validate that it read the `mock-data.instructions.md` during the run.
 
 ```
-Create a mock-collection-data.ts file in src/lib/ with sample photo collections data.
+Following the conventions in .github/instructions/mock-data.instructions.md, create a mock-collection-data.ts file in src/lib/ with sample photo collections data.
 ```
 
 **Output:**
