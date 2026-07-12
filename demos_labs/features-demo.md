@@ -434,7 +434,7 @@ Wire these two functions into the explore page at src/app/explore/page.tsx. Add 
 // Function to search photos by title with case-insensitive partial matching
 ```
 
-1.  **Open the Completions Panel:** Press `Ctrl+Enter` (Windows/Linux) or `Ctrl+Enter` (Mac) and wait a few seconds.
+1.  **Open the Completions Panel:** Press `Ctrl+Enter` (Windows/Linux) or `Ctrl+Enter` (Mac) and wait a few seconds. You can also use 'show and run commands' from Copilot chat to open the Completions Panel.
 2.  **Compare suggestions:** The panel shows multiple alternative implementations side by side
 3.  **Select the best:** Click **Accept** on the implementation you prefer
 
